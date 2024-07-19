@@ -23,8 +23,11 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "test": "jest --passWithNoTests",
+    "eject": "react-scripts eject",
+    "lint": "eslint --fix **/*.{ts,tsx}",
+    "prettier": "prettier --write **/*.{ts,tsx}",
+    "tsc": "tsc"
   },
   "eslintConfig": {
     "extends": [
