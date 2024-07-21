@@ -13,6 +13,27 @@
 - **일일 스크럼**: 매일 오전 10시에 스크럼을 진행하며, 당일 컨디션, 스케줄을 공유하고 할 일을 배분합니다. 칸반보드를 최신화합니다.
 - **의사소통 활성화**: 활발하게 의사소통합니다.
 
+## 디렉토리 구조
+
+```plaintext
+.src/
+  ├── index.tsx
+  ├── App.tsx
+  ├── types/
+  ├── app/
+  │   └── api/
+  ├── layout/
+  ├── constants/
+  ├── features/
+  ├── utils/
+  ├── styles/
+  │   └── index.css
+  ├── components/
+  ├── hooks/
+  ├── assets/
+  ├── pages/
+```
+
 ## 커밋 컨벤션
 
 | 커밋 유형 | 의미                                                                      |
