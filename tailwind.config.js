@@ -23,6 +23,10 @@ module.exports = {
         Pretendard: ['Pretendard', 'sans-serif'],
       },
     },
+    screens: {
+      tablet: '744px',
+      desktop: '1920px',
+    },
   },
   plugins: [],
 };
