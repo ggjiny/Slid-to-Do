@@ -17,6 +17,6 @@
     "noEmit": true,
     "jsx": "react-jsx"
   },
-  "include": ["src"],
+  "include": ["src", "svgr.d.ts"],
   "extends": "./tsconfig.paths.json"
 }

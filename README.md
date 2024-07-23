@@ -166,11 +166,9 @@ Github Flow는 단순하고 효과적인 브랜치 전략으로, 항상 배포 �
 
 - PR을 제출하기 전에 아래 항목들을 확인해 주세요:
 
-- [ ] merge할 브랜치를 확인했습니다.
 - [ ] Reviewers를 지정했습니다.
 - [ ] Assignees로 본인을 선택했습니다.
 - [ ] 적절한 label을 선택했습니다.
-- [ ] PR은 본인이 merge합니다 (Squash and merge).
 
 ---
 
