@@ -18,7 +18,7 @@
   ],
   "plugins": ["prettier"],
   "rules": {
-    "max-len": ["warn", { "code": 80 }],
+    // "max-len": ["warn", { "code": 80 }],
     "prettier/prettier": "error",
     "indent": ["error", 2],
     "quotes": ["error", "single"],
@@ -29,6 +29,7 @@
     "comma-dangle": ["error", "always-multiline"],
     "no-console": "warn",
     "react/react-in-jsx-scope": "off",
+    "react/require-default-props": "off",
     // .tsx에서도 jsx사용
     "react/jsx-filename-extension": ["warn", { "extensions": [".tsx"] }],
     // import 플러그인은 확장자를 명시해야 하는데 ts는 확장자를 생략하므로 무시하도록 함
