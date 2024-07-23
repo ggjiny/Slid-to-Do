@@ -8,7 +8,7 @@ import {
 } from '@/assets';
 import { useState } from 'react';
 
-export default function SideBar() {
+function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen(!isOpen);
@@ -72,3 +72,5 @@ export default function SideBar() {
     </div>
   );
 }
+
+export default SideBar;

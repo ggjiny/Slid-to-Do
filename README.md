@@ -29,10 +29,22 @@
   ├── styles/
   │   └── index.css
   ├── components/
+  │   └── SideBar/
+  │       └── index.tsx/
   ├── hooks/
   ├── assets/
   ├── pages/
+  │   └── Home/
+  │       └── index.tsx
+  │       └── components/
+  │           └── SideBar/
+  │               └── index.tsx
 ```
+
+- **정해진 폴더명(components, pages) 외에는 모두 대문자로 시작**
+- **특정 페이지 내에서만 쓰이는 컴포넌트는 해당 페이지 폴더 내부에 components 폴더 속에 저장**
+- **각 컴포넌트는 개별 폴더에 저장**
+- **각 폴더의 시작점은 index.tsx**
 
 ## 커밋 컨벤션
 
