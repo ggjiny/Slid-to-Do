@@ -47,16 +47,13 @@ function Button({
   ...props
 }: ButtonProps) {
   return (
-    <div className="flex justify-center">
-      <button
-        type="button"
-        className={cn(ButtonVariants({ shape, round, size }), additionalClass)}
-        // eslint-disable-next-line react/jsx-props-no-spreading
-        {...props}
-      >
-        {children}
-      </button>
-    </div>
+    <button
+      type="button"
+      className={cn(ButtonVariants({ shape, round, size }), additionalClass)}
+      {...props}
+    >
+      {children}
+    </button>
   );
 }
 
