@@ -21,9 +21,12 @@
     // "max-len": ["warn", { "code": 80 }],
     "prettier/prettier": "error",
     "indent": ["error", 2],
-    "quotes": ["error", "single"],
+    "quotes": ["error", "single", {
+      "allowTemplateLiterals":  true
+  }],
     "semi": ["error", "always"],
-    "no-unused-vars": ["warn"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error"],
     "complexity": ["warn", { "max": 10 }],
     "max-depth": ["warn", 4],
     "comma-dangle": ["error", "always-multiline"],
@@ -41,7 +44,9 @@
         "ts": "never",
         "tsx": "never"
       }
-    ]
+    ],
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "react/jsx-no-useless-fragment": "off"
   },
   "overrides": [
     {
