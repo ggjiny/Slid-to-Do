@@ -13,12 +13,6 @@ module.exports = {
         '2xl': '1.5rem',
         '3xl': '1.875rem',
       },
-      colors: {
-        mono: {
-          white: '#FFFFFF',
-          black: '#000000',
-        },
-      },
       fontFamily: {
         Pretendard: ['Pretendard', 'sans-serif'],
       },
