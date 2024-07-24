@@ -1,4 +1,4 @@
-import { DeleteIcon } from '@/assets';
+import { DeleteIcon } from '@assets';
 import { useState } from 'react';
 
 export interface PopupProps {

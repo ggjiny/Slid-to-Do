@@ -2,10 +2,9 @@
   "compilerOptions": {
     "paths": {
       "@public/*": ["./public/*"],
-      "@/*": ["./src/*"],
       "@app/*": ["./src/app/*"],
       "@api/*": ["./src/app/api/*"],
-      "@assets/*": ["./src/assets/*"],
+      "@assets": ["./src/assets/index.ts"],
       "@components/*": ["./src/components/*"],
       "@constants/*": ["./src/constants/*"],
       "@features/*": ["./src/features/*"],
