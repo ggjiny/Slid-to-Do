@@ -5,7 +5,7 @@ import {
   LogoIcon,
   ProfileIcon,
   TextLogoIcon,
-} from '@assets/index';
+} from '@assets';
 import { useState } from 'react';
 
 function SideBar() {
