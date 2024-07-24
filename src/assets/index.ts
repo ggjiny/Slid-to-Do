@@ -1,3 +1,4 @@
+export { ReactComponent as DeleteIcon } from './delete.svg';
 export { ReactComponent as FlagIcon } from './flag.svg';
 export { ReactComponent as FoldIcon } from './fold.svg';
 export { ReactComponent as HomeIcon } from './home.svg';

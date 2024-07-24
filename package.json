@@ -7,7 +7,7 @@
     "build": "craco build",
     "test": "jest --passWithNoTests",
     "eject": "craco eject",
-    "lint": "eslint .",
+    "lint": "eslint **/*.{ts,tsx}",
     "lint:fix": "eslint --fix **/*.{ts,tsx}",
     "prettier": "prettier --write **/*.{ts,tsx}",
     "prettier:check": "prettier --check .",
@@ -37,6 +37,7 @@
   },
   "dependencies": {
     "@craco/craco": "^7.1.0",
+    "@storybook/builder-webpack5": "^8.2.5",
     "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
