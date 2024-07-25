@@ -3,5 +3,8 @@ export { ReactComponent as FlagIcon } from './flag.svg';
 export { ReactComponent as FoldIcon } from './fold.svg';
 export { ReactComponent as HomeIcon } from './home.svg';
 export { ReactComponent as LogoIcon } from './logo.svg';
+export { ReactComponent as PlusIcon } from './plus.svg';
 export { ReactComponent as ProfileIcon } from './profile.svg';
 export { ReactComponent as TextLogoIcon } from './textLogo.svg';
+export { ReactComponent as VisibilityOffIcon } from './visibilityOff.svg';
+export { ReactComponent as VisibilityOnIcon } from './visibilityOn.svg';
