@@ -20,7 +20,7 @@
   "rules": {
     // "max-len": ["warn", { "code": 80 }],
     "prettier/prettier": "error",
-    "indent": ["error", 2],
+    // "indent": ["error", 2],
     "quotes": ["error", "single", {
       "allowTemplateLiterals":  true
   }],
@@ -45,8 +45,10 @@
         "tsx": "never"
       }
     ],
-    "import/no-extraneous-dependencies": "off",
+    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
     "react/jsx-no-useless-fragment": "off",
+    "jsx-a11y/click-events-have-key-events": "off",
+    "jsx-a11y/no-static-element-interactions": "off",
     // nesting: label이 form control을 직접 감싸는지, id: htmlFor/id로 연결돼있는지
     "jsx-a11y/label-has-associated-control": [ 2, {
       "some": [ "nesting", "id" ]
