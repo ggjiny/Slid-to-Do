@@ -26,7 +26,7 @@
   }],
     "semi": ["error", "always"],
     "no-unused-vars": "off",
-    "@typescript-eslint/no-unused-vars": ["error"],
+    "@typescript-eslint/no-unused-vars": "error",
     "complexity": ["warn", { "max": 10 }],
     "max-depth": ["warn", 4],
     "comma-dangle": ["error", "always-multiline"],
@@ -45,8 +45,12 @@
         "tsx": "never"
       }
     ],
-    "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
-    "react/jsx-no-useless-fragment": "off"
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-no-useless-fragment": "off",
+    // nesting: label이 form control을 직접 감싸는지, id: htmlFor/id로 연결돼있는지
+    "jsx-a11y/label-has-associated-control": [ 2, {
+      "some": [ "nesting", "id" ]
+    }]
   },
   "overrides": [
     {

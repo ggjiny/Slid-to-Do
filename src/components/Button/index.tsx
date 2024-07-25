@@ -3,9 +3,7 @@ import { cva, VariantProps } from 'class-variance-authority';
 import { ButtonHTMLAttributes, ReactNode } from 'react';
 
 const ButtonVariants = cva(
-  `
-  flex justify-center items-center font-semibold text-sm
-  `,
+  'flex justify-center items-center font-semibold text-sm',
   {
     variants: {
       shape: {
