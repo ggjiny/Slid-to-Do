@@ -2,7 +2,7 @@ import routes from '@constants/routes';
 import DashboardPage from '@pages/Dashboard';
 import NotesPage from '@pages/Notes';
 import SignInPage from '@pages/SignIn';
-import SignUpPage from '@pages/signUp';
+import SignUpPage from '@pages/SignUp';
 import { createBrowserRouter } from 'react-router-dom';
 import App from './App';
 

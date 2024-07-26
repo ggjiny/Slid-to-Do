@@ -1,5 +1,5 @@
 import { KebabIcon } from '@assets';
-import useOutsideClick from '@utils/useOutsideClick';
+import useOutsideClick from '@hooks/useOutsideClick';
 import { MouseEvent, useRef, useState } from 'react';
 
 interface KebabProps {
