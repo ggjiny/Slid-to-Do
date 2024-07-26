@@ -45,7 +45,7 @@ function TodoList({
           <div className="flex w-full items-start space-x-2 overflow-hidden">
             <button
               type="button"
-              className="flex h-6 w-6 flex-shrink-0 items-center justify-center p-0.5"
+              className="flex h-6 w-6 flex-shrink-0 items-center justify-center"
               onClick={(e) => {
                 e.stopPropagation();
                 onToggleDone(todo.id);
@@ -60,12 +60,12 @@ function TodoList({
             </button>
             <div className="min-w-0 flex-1 overflow-hidden">
               <div
-                className={`pt-0.5 text-sm font-normal text-slate-800 ${todo.done ? 'line-through' : ''} truncate whitespace-nowrap`}
+                className={`pt-[1px] text-sm font-normal text-slate-800 ${todo.done ? 'line-through' : ''} truncate whitespace-nowrap`}
               >
                 {todo.title}
               </div>
               {showGoals && todo.goal !== null && (
-                <div className="mt-1 flex items-center overflow-hidden">
+                <div className="flex items-center overflow-hidden">
                   <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-slate-50">
                     <GoalIcon width={24} height={24} />
                   </div>
