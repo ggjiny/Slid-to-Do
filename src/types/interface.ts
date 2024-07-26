@@ -20,3 +20,23 @@ export interface Todo {
   updatedAt: string;
   createdAt: string;
 }
+
+export interface Note_Todo {
+  done: boolean;
+  title: string;
+  id: number;
+}
+
+export interface Note_Goal {
+  title: string;
+  id: number;
+}
+
+export interface Note {
+  todo: Note_Todo;
+  updatedAt: string;
+  createdAt: string;
+  title: string;
+  id: number;
+  goal: Note_Goal;
+}
