@@ -12,11 +12,11 @@ const router = createBrowserRouter([
     element: <App />,
     children: [
       {
-        path: routes.signin,
+        path: routes.signIn,
         element: <SignInPage />,
       },
       {
-        path: routes.signup,
+        path: routes.signUp,
         element: <SignUpPage />,
       },
       {

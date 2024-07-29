@@ -6,28 +6,48 @@ on:
       - main
 
 jobs:
-  build:
+  pr-check:
     runs-on: ubuntu-latest
 
     steps:
+      # 리눅스 환경에 checkout, 다른 사람이 만들어 놓은 Action 사용
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Set up Node.js
+      # 해당 환경을 Node.js 위에서 실행
+      # GitHub Actions 러너의 기본 Node.js 버전을 사용
+      # 특정 node.js 버전에 의존하지 않을 때 사용
+      - name: Use Node.js
         uses: actions/setup-node@v4
+
+      # node_modules가 변했을때만 npm install 하기 위한 캐시
+      - name: Cache node modules
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: node_modules
+          key: npm-packages-${{hashFiles('**/package-lock.json')}}
+
       - name: Install dependencies
+        if: steps.cache.outputs.cache-hit != 'true'
         run: npm ci
 
-      - name: Build
-        run: npm run build
-
+      # if always로 여기서 에러가 나도 뒤에 내용 실행
       - name: Prettier check
         run: npm run prettier
+        if: ${{ always() }}
 
       - name: Lint check
         run: npm run lint:fix
+        if: ${{ always() }}
 
       - name: TS check
         run: npm run tsc
+        if: ${{ always() }}
+
+      - name: Build
+        run: npm run build
+        if: ${{ always() }}
+
       - name: Test
         run: npm test
