@@ -12,6 +12,7 @@ export { ReactComponent as ArrowDropdownIcon } from './arrowDropdown.svg';
 export { ReactComponent as DeleteIcon } from './delete.svg';
 export { ReactComponent as GrayDelete } from './grayDelete.svg';
 export { ReactComponent as PlusIcon } from './plus.svg';
+export { ReactComponent as PlusBlueIcon } from './plusBlue.svg';
 
 export { ReactComponent as FlagIcon } from './flag.svg';
 export { ReactComponent as HomeIcon } from './home.svg';

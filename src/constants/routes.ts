@@ -3,6 +3,7 @@ const routes = Object.freeze({
   signUp: '/sign-up',
   dashboard: '/dashboard',
   notes: '/notes',
+  todos: '/todos',
 });
 
 export default routes;
