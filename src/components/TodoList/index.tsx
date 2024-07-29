@@ -36,7 +36,7 @@ function TodoList({
       {todos.map((todo) => (
         <div
           key={todo.id}
-          className={`group relative flex cursor-pointer items-center justify-between rounded-lg p-1 transition-all duration-200 ${hoverBgColor}`}
+          className={`group relative flex cursor-pointer items-center justify-between rounded-lg px-1 py-[2px] transition-all duration-200 ${hoverBgColor}`}
           onClick={() => onTodoClick(todo)}
           role="button"
           tabIndex={0}
@@ -58,9 +58,9 @@ function TodoList({
                 <Inactive width={24} height={24} />
               )}
             </button>
-            <div className="min-w-0 flex-1 overflow-hidden">
+            <div className="min-w-0 flex-1 items-center overflow-hidden">
               <div
-                className={`pt-[1px] text-sm font-normal text-slate-800 ${todo.done ? 'line-through' : ''} truncate whitespace-nowrap`}
+                className={`pt-[1px] text-sm font-normal leading-6 text-slate-800 ${todo.done ? 'line-through' : ''} truncate whitespace-nowrap`}
               >
                 {todo.title}
               </div>
@@ -95,7 +95,7 @@ function TodoList({
                   to={todo.linkUrl}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hidden h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-slate-50 tablet:flex"
+                  className="hidden h-6 w-6 flex-shrink-0 items-center justify-center rounded-full tablet:flex"
                   onClick={(e) => e.stopPropagation()}
                   aria-label="Open link"
                 >

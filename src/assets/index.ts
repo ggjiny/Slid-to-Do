@@ -19,9 +19,18 @@ export { ReactComponent as LinkIcon } from './link.svg';
 export { ReactComponent as NoteViewIcon } from './noteView.svg';
 export { ReactComponent as NoteWriteIcon } from './noteWrite.svg';
 
+// input password
 export { ReactComponent as VisibilityOffIcon } from './visibilityOff.svg';
 export { ReactComponent as VisibilityOnIcon } from './visibilityOn.svg';
 
 export { ReactComponent as HamburgerIcon } from './hamburger.svg';
 export { ReactComponent as KebabIcon } from './kebab.svg';
 export { ReactComponent as NoteListIcon } from './noteList.svg';
+
+// dashboard
+export { ReactComponent as ArrowDownIcon } from './arrowDown.svg';
+export { ReactComponent as ArrowRightIcon } from './arrowRight.svg';
+export { ReactComponent as ArrowUpIcon } from './arrowUp.svg';
+export { ReactComponent as ProgressIcon } from './progress.svg';
+export { ReactComponent as ProgressEllipseIcon } from './progressEllipse.svg';
+export { ReactComponent as TodoRecentlyIcon } from './todoRecently.svg';
