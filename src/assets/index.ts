@@ -5,9 +5,12 @@ export { ReactComponent as FoldIcon } from './fold.svg';
 export { ReactComponent as ProfileIcon } from './profile.svg';
 
 export { ReactComponent as ActiveBlue } from './activeBlue.svg';
+export { ReactComponent as ActiveWhite } from './activeWhite.svg';
 export { ReactComponent as Inactive } from './inactive.svg';
 
+export { ReactComponent as ArrowDropdownIcon } from './arrowDropdown.svg';
 export { ReactComponent as DeleteIcon } from './delete.svg';
+export { ReactComponent as GrayDelete } from './grayDelete.svg';
 export { ReactComponent as PlusIcon } from './plus.svg';
 
 export { ReactComponent as FlagIcon } from './flag.svg';

@@ -71,12 +71,8 @@ const todos = [
     updatedAt: '2023-07-24T12:34:56Z',
     createdAt: '2023-07-24T12:00:00Z',
     goal: {
-      updatedAt: '2023-07-24T12:34:56Z',
-      createdAt: '2023-07-24T12:00:00Z',
-      title: '자바스크립트로 웹 서비스 만들기',
       id: 5,
-      userId: 1,
-      teamId: 'team1',
+      title: '자바스크립트로 웹 서비스 만들기',
     },
   },
 ];
