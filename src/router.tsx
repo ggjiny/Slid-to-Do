@@ -1,5 +1,6 @@
 import routes from '@constants/routes';
 import DashboardPage from '@pages/Dashboard';
+import GoalDetailPage from '@pages/GoalDetail';
 import NotesPage from '@pages/Notes';
 import SignInPage from '@pages/SignIn';
 import SignUpPage from '@pages/SignUp';
@@ -23,6 +24,10 @@ const router = createBrowserRouter([
       {
         path: routes.dashboard,
         element: <DashboardPage />,
+      },
+      {
+        path: routes.goalDetail,
+        element: <GoalDetailPage />,
       },
       {
         path: routes.notes,

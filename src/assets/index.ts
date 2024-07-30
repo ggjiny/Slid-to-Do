@@ -38,3 +38,5 @@ export { ReactComponent as ArrowUpIcon } from './arrowUp.svg';
 export { ReactComponent as ProgressIcon } from './progress.svg';
 export { ReactComponent as ProgressEllipseIcon } from './progressEllipse.svg';
 export { ReactComponent as TodoRecentlyIcon } from './todoRecently.svg';
+
+export { ReactComponent as NoteIcon } from './note.svg';

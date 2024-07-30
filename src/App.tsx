@@ -5,7 +5,7 @@ function App() {
   const { pathname } = useLocation();
 
   const bgColor =
-    pathname === '/signin' || pathname === '/signup'
+    pathname === '/sign-in' || pathname === '/sign-up'
       ? 'bg-white'
       : 'bg-slate-200';
 
@@ -13,7 +13,7 @@ function App() {
     <div
       className={`h-dvh w-dvw ${bgColor} font-Pretendard text-base font-normal`}
     >
-      {pathname !== '/signin' && pathname !== '/signup' && <SideBar />}
+      {pathname !== '/sign-in' && pathname !== '/sign-up' && <SideBar />}
       <div className="ml-0 tablet:ml-[60px] desktop:ml-0">
         <Outlet />
       </div>
