@@ -90,6 +90,8 @@ ex) index.d.ts
 - 딕셔너리, 배열 등의 복수의 데이터를 담는 자료구조에 대한 변수명 s 붙이기 `ex) heights`
 - 로딩이나 모달창 등의 보여짐 여부에 대한 boolean state의 경우 is 붙이기 `ex) isModalOpen, isLoading`
 - 데이터 접근 함수의 경우 get으로 시작하기 `ex) getUserData`
+- 컴포넌트 내부에서 동작하는 함수는 handle 붙이기 `ex) handleClick, handleModalOpen`
+- prop으로 받아서 동작하는 함수는 on 붙이기 `ex) onClick, onClose`
 
 | 함수명 | 동사구 ex) getUserData |
 | ------ | ---------------------- |
