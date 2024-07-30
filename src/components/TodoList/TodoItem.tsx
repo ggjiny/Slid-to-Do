@@ -8,7 +8,7 @@ import {
   NoteViewIcon,
   NoteWriteIcon,
 } from '@assets';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface TodoItemProps {
   todo: Todo;
@@ -17,8 +17,7 @@ interface TodoItemProps {
   showIcons: boolean;
   hoverBgColor: string;
   onTodoClick: (todo: Todo) => void;
-  onOpenNoteDetail?: (id: number) => void;
-  onOpenNoteWrite?: (id: number) => void;
+  onOpenNoteDetail?: (noteId: number | null) => void;
 }
 
 function TodoItem({
@@ -29,8 +28,9 @@ function TodoItem({
   hoverBgColor,
   onTodoClick,
   onOpenNoteDetail,
-  onOpenNoteWrite,
 }: TodoItemProps) {
+  const navigate = useNavigate();
+
   return (
     <div
       key={todo.id}
@@ -106,7 +106,7 @@ function TodoItem({
               className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-slate-50"
               onClick={(e) => {
                 e.stopPropagation();
-                if (onOpenNoteDetail) onOpenNoteDetail(todo.id);
+                if (onOpenNoteDetail) onOpenNoteDetail(todo.noteId);
               }}
               aria-label="View note"
             >
@@ -118,7 +118,7 @@ function TodoItem({
               className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-slate-50"
               onClick={(e) => {
                 e.stopPropagation();
-                if (onOpenNoteWrite) onOpenNoteWrite(todo.id);
+                navigate('/note', { state: todo }); // 임시
               }}
               aria-label="Write note"
             >

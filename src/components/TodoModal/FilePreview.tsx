@@ -1,11 +1,10 @@
 interface FilePreviewProps {
-  fileType: string;
   fileUrl: string;
-  fileName: string | null;
+  file: File;
 }
 
-function FilePreview({ fileType, fileUrl, fileName }: FilePreviewProps) {
-  if (fileType === 'application/pdf') {
+function FilePreview({ fileUrl, file }: FilePreviewProps) {
+  if (file.type === 'application/pdf') {
     return (
       <embed
         src={fileUrl}
@@ -21,7 +20,7 @@ function FilePreview({ fileType, fileUrl, fileName }: FilePreviewProps) {
     );
   }
 
-  if (fileType.startsWith('image/')) {
+  if (file.type.startsWith('image/')) {
     return (
       <img
         src={fileUrl}
@@ -31,7 +30,7 @@ function FilePreview({ fileType, fileUrl, fileName }: FilePreviewProps) {
     );
   }
 
-  if (fileType === 'video/mp4' || fileType === 'video/quicktime') {
+  if (file.type === 'video/mp4' || file.type === 'video/quicktime') {
     return (
       <video
         src={fileUrl}
@@ -47,7 +46,7 @@ function FilePreview({ fileType, fileUrl, fileName }: FilePreviewProps) {
     <div className="max-h-full max-w-full rounded-[20px] text-center text-xs text-slate-400 tablet:text-base">
       미리보기가 지원되지 않는 파일 형식입니다.
       <br />
-      {fileName}
+      {file.name}
     </div>
   );
 }

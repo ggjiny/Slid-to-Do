@@ -6,8 +6,7 @@ function useTodoDetail(todo: Todo) {
   const [title, setTitle] = useState(todo.title);
   const [goal, setGoal] = useState(todo.goal);
   const [fileUrl, setFileUrl] = useState(todo.fileUrl);
-  const [fileType, setFileType] = useState<string | null>(null);
-  const [fileName, setFileName] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
   const [linkUrl, setLinkUrl] = useState(todo.linkUrl);
   const [isModified, setIsModified] = useState(false);
 
@@ -32,16 +31,14 @@ function useTodoDetail(todo: Todo) {
     title,
     goal,
     fileUrl,
-    fileType,
-    fileName,
+    file,
     linkUrl,
     isModified,
     setDone,
     setTitle,
     setGoal,
     setFileUrl,
-    setFileType,
-    setFileName,
+    setFile,
     setLinkUrl,
   };
 }

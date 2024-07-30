@@ -1,4 +1,5 @@
 import { DeleteIcon } from '@assets';
+import Button from '@components/Button';
 
 export interface PopupProps {
   message: string;
@@ -35,24 +36,26 @@ function Popup({
         </div>
         <div className="flex w-full justify-center gap-2">
           {!singleButton && (
-            <button
-              type="button"
-              className="flex h-12 w-[120px] items-center justify-center rounded-xl border border-blue-500 bg-white text-base font-semibold leading-normal text-blue-500"
+            <Button
+              shape="outlined"
+              size="lg"
               onClick={onCancel}
+              additionalClass="text-base leading-normal"
               aria-label="Cancel"
             >
               취소
-            </button>
+            </Button>
           )}
-          <button
-            type="button"
-            className="flex h-12 w-[120px] items-center justify-center rounded-xl bg-blue-500 text-base font-semibold leading-normal text-white"
+          <Button
+            shape="solid"
+            size="lg"
             onClick={onConfirm}
+            additionalClass="text-base leading-normal"
             aria-label="Confirm"
           >
             <span className="block tablet:hidden">확인</span>
             <span className="hidden tablet:block">{confirmMessage}</span>
-          </button>
+          </Button>
         </div>
       </div>
     </div>

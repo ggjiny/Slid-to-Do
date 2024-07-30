@@ -1,4 +1,4 @@
-import { Goal, Todo } from '@/types/interface';
+import { Goal } from '@/types/interface';
 import { DeleteIcon, GrayDelete } from '@assets';
 import Button from '@components/Button';
 import LinkModal from '@components/LinkModal';
@@ -9,9 +9,7 @@ import FileUploadButton from '../FileUploadButton';
 import GoalSection from '../GoalSection';
 import LinkCard from '../LinkCard';
 import LinkUploadButton from '../LinkUploadButton';
-import StatusSection from '../StatusSection';
 import TitleSection from '../TitleSection';
-import useTodoDetail from './useTodoDetail';
 
 const mockGoals: Goal[] = [
   {
@@ -56,30 +54,18 @@ const mockGoals: Goal[] = [
   },
 ];
 
-export interface TodoDetailModalProps {
-  todo: Todo;
+interface TodoCreateModalProps {
   onClose: () => void;
+  initialGoal?: Goal;
 }
 
-function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
-  const {
-    done,
-    title,
-    goal,
-    fileUrl,
-    file,
-    linkUrl,
-    isModified,
-    setDone,
-    setTitle,
-    setGoal,
-    setFileUrl,
-    setFile,
-    setLinkUrl,
-  } = useTodoDetail(todo);
-
+function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
+  const [title, setTitle] = useState('');
+  const [goal, setGoal] = useState<Goal | null>(initialGoal || null);
+  const [fileUrl, setFileUrl] = useState<string | null>(null);
+  const [file, setFile] = useState<File | null>(null);
+  const [linkUrl, setLinkUrl] = useState<string | null>(null);
   const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
-  const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
   const [isUnsavedChangesPopupVisible, setIsUnsavedChangesPopupVisible] =
     useState(false);
 
@@ -137,21 +123,12 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
   };
 
   const handleSave = () => {
-    // PATCH
+    // POST
     onClose();
-  };
-
-  const handleDelete = () => {
-    // DELETE
-    onClose();
-  };
-
-  const toggleDone = () => {
-    setDone(!done);
   };
 
   const handleConfirmClose = () => {
-    if (isModified) {
+    if (title || goal || fileUrl || linkUrl) {
       setIsUnsavedChangesPopupVisible(true);
     } else {
       onClose();
@@ -159,7 +136,7 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
   };
 
   const isTitleValid = title.length <= 30;
-  const canSave = isModified && isTitleValid && title.length > 0;
+  const canSave = isTitleValid && title.length > 0;
 
   return (
     <>
@@ -167,7 +144,7 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
         <div className="relative flex h-full w-full flex-col gap-2.5 bg-white p-6 tablet:h-auto tablet:w-[520px] tablet:overflow-visible tablet:rounded-xl">
           <div className="fixed left-0 right-0 top-0 z-10 flex w-full items-center justify-between bg-white p-6 tablet:static tablet:p-0">
             <div className="text-lg font-bold leading-7 text-slate-800">
-              할 일
+              할 일 생성
             </div>
             <div className="flex items-center">
               <button
@@ -180,8 +157,8 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
               </button>
             </div>
           </div>
-          <div className="mt-6 flex grow flex-col items-center justify-start gap-y-6 overflow-auto pb-20 pt-6 tablet:mt-0 tablet:justify-between tablet:overflow-visible tablet:pb-0 tablet:pt-0">
-            <StatusSection done={done} toggleDone={toggleDone} />
+
+          <div className="mt-6 flex grow flex-col items-center justify-start gap-y-6 overflow-auto pb-20 pt-6 tablet:mt-0 tablet:justify-between tablet:overflow-visible tablet:py-0">
             <TitleSection
               title={title}
               onTitleChange={handleTitleChange}
@@ -210,7 +187,7 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
               </div>
               {fileUrl && file && (
                 <div className="relative mx-auto mt-2 flex h-[184px] w-full items-center justify-center rounded-[20px] bg-slate-200 p-6">
-                  <FilePreview fileUrl={fileUrl} file={file} />
+                  <FilePreview file={file} fileUrl={fileUrl} />
                   <button
                     type="button"
                     className="absolute right-2 top-2 flex h-6 w-6 items-center justify-center rounded-full border bg-slate-200"
@@ -229,15 +206,8 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
               )}
             </div>
           </div>
+
           <div className="fixed bottom-0 left-0 right-0 z-10 flex w-full justify-center gap-x-2 bg-white px-6 py-3 tablet:static tablet:mt-8 tablet:p-0">
-            <Button
-              shape="outlined"
-              size="lg"
-              onClick={() => setIsDeletePopupVisible(true)}
-              additionalClass="flex-grow px-6 py-3 text-base leading-normal"
-            >
-              삭제
-            </Button>
             <Button
               shape="solid"
               size="lg"
@@ -245,7 +215,7 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
               additionalClass="flex-grow px-6 py-3 text-base leading-normal"
               disabled={!canSave}
             >
-              수정
+              확인
             </Button>
           </div>
         </div>
@@ -259,17 +229,9 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
           }}
         />
       )}
-      {isDeletePopupVisible && (
-        <Popup
-          message="삭제하시겠습니까?"
-          confirmMessage="삭제"
-          onConfirm={handleDelete}
-          onCancel={() => setIsDeletePopupVisible(false)}
-        />
-      )}
       {isUnsavedChangesPopupVisible && (
         <Popup
-          message={`정말 나가시겠어요?\n변경사항이 저장되지 않습니다.`}
+          message={`정말 나가시겠어요?\n저장되지 않습니다.`}
           confirmMessage="저장안함"
           onConfirm={onClose}
           onCancel={() => setIsUnsavedChangesPopupVisible(false)}
@@ -279,4 +241,4 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
   );
 }
 
-export default TodoDetailModal;
+export default TodoCreateModal;
