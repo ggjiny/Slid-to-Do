@@ -1,6 +1,7 @@
 import { Todo } from '@/types/interface';
 import { ArrowDownIcon, ArrowUpIcon, PlusIcon } from '@assets';
 import useWindowWidth from '@hooks/useWindowWidth';
+import ProgressBar from '@ramonak/react-progress-bar';
 import { useEffect, useState } from 'react';
 import { mockTodosData } from '../mockData';
 import TodoSection from './TodoSection';
@@ -10,7 +11,7 @@ interface TodosByGoalProps {
 }
 
 function TodosByGoalBox({ title }: TodosByGoalProps) {
-  const progress = 25;
+  const [progress, setProgress] = useState(0);
   const windowWidth = useWindowWidth();
   const [todos, setTodos] = useState<Todo[] | null>(null);
   const [dones, setDones] = useState<Todo[] | null>(null);
@@ -39,6 +40,10 @@ function TodosByGoalBox({ title }: TodosByGoalProps) {
       setDones(donesData.slice(0, 4));
     }
   }, [isToggleOpen]);
+
+  useEffect(() => {
+    setProgress(25);
+  });
 
   let height = 300;
   let expandedHeight = 0;
@@ -72,10 +77,14 @@ function TodosByGoalBox({ title }: TodosByGoalProps) {
         </button>
       </div>
       <div className="mt-2 flex h-5 w-full items-center justify-between gap-2 rounded-[13px] bg-white px-[9px] py-[2px]">
-        <div className="relative h-1 grow rounded-md bg-slate-100">
-          <div
-            className="absolute left-0 top-0 h-full rounded-md bg-slate-900"
-            style={{ width: `${progress}%` }}
+        <div className="h-1 grow rounded-md bg-slate-100">
+          <ProgressBar
+            completed={progress}
+            bgColor="#0F172A"
+            isLabelVisible={false}
+            baseBgColor="transparent"
+            transitionDuration="500ms"
+            height="100%"
           />
         </div>
         <div className="text-xs font-semibold leading-4">{progress}%</div>

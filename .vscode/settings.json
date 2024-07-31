@@ -4,5 +4,15 @@
     "source.fixAll.eslint": "explicit",
     "source.fixAll": "explicit"
   },
-  "cSpell.words": ["todos", "dones", "Pretendard"]
+  "cSpell.words": [
+    "todos",
+    "dones",
+    "Pretendard",
+    "craco",
+    "commitlint",
+    "clsx",
+    "tailwindcss",
+    "svgr",
+    "tanstack"
+  ]
 }

@@ -5,7 +5,7 @@ import TodosByGoal from './components/TodosByGoal';
 function DashboardPage() {
   return (
     <div className="flex min-h-screen justify-center bg-slate-200 desktop:min-w-[1920px]">
-      <div className="flex w-[375px] flex-col pb-16 tablet:w-[637px] desktop:w-[1200px]">
+      <div className="flex w-[343px] flex-col pb-16 tablet:w-[637px] desktop:w-[1200px]">
         <h1 className="mt-6 hidden text-lg font-semibold leading-7 text-slate-900 tablet:block">
           대시보드
         </h1>
