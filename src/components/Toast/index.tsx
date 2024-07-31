@@ -4,16 +4,27 @@ import { createRoot } from 'react-dom/client';
 interface ToastProps {
   message: string;
   type: 'completed' | 'error';
+  onRemove: () => void;
 }
 
-function Toast({ message, type }: ToastProps) {
+function Toast({ message, type, onRemove }: ToastProps) {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    setIsVisible(true);
-    const timer = setTimeout(() => setIsVisible(false), 3000);
-    return () => clearTimeout(timer);
-  }, [message]);
+    const fadeInTimer = setTimeout(() => {
+      setIsVisible(true);
+    }, 100);
+
+    const fadeOutTimer = setTimeout(() => {
+      setIsVisible(false);
+      setTimeout(onRemove, 500);
+    }, 3000);
+
+    return () => {
+      clearTimeout(fadeInTimer);
+      clearTimeout(fadeOutTimer);
+    };
+  }, [message, onRemove]);
 
   return (
     <div
@@ -45,13 +56,7 @@ export const showToast = (
     document.body.removeChild(toastContainer);
   };
 
-  root.render(<Toast message={message} type={type} />);
-
-  setTimeout(() => {
-    const fadeOutTimer = setTimeout(removeToast, 500);
-    root.render(<Toast message={message} type={type} />);
-    clearTimeout(fadeOutTimer);
-  }, 3000);
+  root.render(<Toast message={message} type={type} onRemove={removeToast} />);
 };
 
 export const showErrorToast = (message: string) => {

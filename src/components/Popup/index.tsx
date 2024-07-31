@@ -1,5 +1,6 @@
 import { DeleteIcon } from '@assets';
 import Button from '@components/Button';
+import useVisibility from '@hooks/useVisibility';
 
 export interface PopupProps {
   message: string;
@@ -16,14 +17,28 @@ function Popup({
   onConfirm,
   onCancel,
 }: PopupProps) {
+  const {
+    isVisible,
+    handleClose: handleCancel,
+    handleConfirm,
+  } = useVisibility(onCancel, onConfirm);
+
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="flex h-[203px] w-[300px] flex-col items-center justify-center gap-2.5 rounded-lg bg-white p-6 tablet:h-[216px] tablet:w-[450px]">
+    <div
+      className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
+        isVisible ? 'opacity-100' : 'opacity-0'
+      }`}
+    >
+      <div
+        className={`flex h-[203px] w-[300px] transform flex-col items-center justify-center gap-2.5 rounded-lg bg-white p-6 transition-transform duration-300 tablet:h-[216px] tablet:w-[450px] ${
+          isVisible ? 'translate-y-0' : '-translate-y-10'
+        }`}
+      >
         <div className="flex w-full justify-end">
           <button
             type="button"
             className="flex items-center justify-center"
-            onClick={onCancel}
+            onClick={handleCancel}
             aria-label="Close"
           >
             <DeleteIcon width={24} height={24} />
@@ -39,7 +54,7 @@ function Popup({
             <Button
               shape="outlined"
               size="lg"
-              onClick={onCancel}
+              onClick={handleCancel}
               additionalClass="text-base leading-normal"
               aria-label="Cancel"
             >
@@ -49,7 +64,7 @@ function Popup({
           <Button
             shape="solid"
             size="lg"
-            onClick={onConfirm}
+            onClick={handleConfirm}
             additionalClass="text-base leading-normal"
             aria-label="Confirm"
           >
