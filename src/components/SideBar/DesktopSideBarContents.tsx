@@ -20,7 +20,7 @@ function DesktopSideBarContents() {
   };
   useOutsideClick(inputRef, () => setIsEditing(false));
 
-  const handleAddGoadBtn = (e: MouseEvent) => {
+  const handleAddGoalBtn = (e: MouseEvent) => {
     e.stopPropagation();
     setIsEditing(true);
   };
@@ -89,7 +89,7 @@ function DesktopSideBarContents() {
           shape="outlined"
           size="sm"
           additionalClass="w-full"
-          onClick={(e) => handleAddGoadBtn(e)}
+          onClick={(e) => handleAddGoalBtn(e)}
           disabled={isEditing}
         >
           <PlusIcon

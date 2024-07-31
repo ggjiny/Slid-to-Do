@@ -20,7 +20,7 @@ function MobileSideBarContents() {
   };
   useOutsideClick(inputRef, () => setIsEditing(false));
 
-  const handleAddGoadBtn = (e: MouseEvent) => {
+  const handleAddGoalBtn = (e: MouseEvent) => {
     e.stopPropagation();
     setIsEditing(true);
   };
@@ -74,7 +74,7 @@ function MobileSideBarContents() {
         <Button
           shape="outlined"
           size="xs"
-          onClick={(e) => handleAddGoadBtn(e)}
+          onClick={(e) => handleAddGoalBtn(e)}
           disabled={isEditing}
         >
           <PlusIcon
