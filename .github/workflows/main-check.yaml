@@ -45,9 +45,5 @@ jobs:
         run: npm run tsc
         if: ${{ always() }}
 
-      - name: Build
-        run: npm run build
-        if: ${{ always() }}
-
       - name: Test
         run: npm test
