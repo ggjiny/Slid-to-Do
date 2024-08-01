@@ -40,3 +40,14 @@ export { ReactComponent as ProgressEllipseIcon } from './progressEllipse.svg';
 export { ReactComponent as TodoRecentlyIcon } from './todoRecently.svg';
 
 export { ReactComponent as NoteIcon } from './note.svg';
+
+// new note
+export { ReactComponent as AlignCenterIcon } from './alignCenter.svg';
+export { ReactComponent as AlignLeftIcon } from './alignLeft.svg';
+export { ReactComponent as AlignRightIcon } from './alignRight.svg';
+export { ReactComponent as BoldIcon } from './bold.svg';
+export { ReactComponent as BulletIcon } from './bullet.svg';
+export { ReactComponent as FontColorIcon } from './fontColor.svg';
+export { ReactComponent as ItalicIcon } from './italic.svg';
+export { ReactComponent as NumberListIcon } from './numberList.svg';
+export { ReactComponent as UnderlineIcon } from './underline.svg';

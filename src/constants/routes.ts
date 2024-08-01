@@ -4,6 +4,7 @@ const routes = Object.freeze({
   dashboard: '/dashboard',
   goalDetail: '/goal-detail',
   notes: '/notes',
+  newNote: '/notes/new',
   todos: '/todos',
 });
 

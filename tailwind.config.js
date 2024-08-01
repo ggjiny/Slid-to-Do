@@ -18,6 +18,7 @@ module.exports = {
         Pretendard: ['Pretendard', ...defaultTheme.fontFamily.sans],
       },
       boxShadow: {
+        xs: '0px 1px 2px 0px rgba(0, 0, 0, 0.05)',
         sm: '0px 4px 6px -2px rgba(0, 0, 0, 0.05)',
         lg: '4px 4px 10px -2px rgba(0, 0, 0, 0.05)',
       },
