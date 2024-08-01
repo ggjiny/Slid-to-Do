@@ -16,6 +16,9 @@ function App() {
       mutations: {
         onError: handleError,
       },
+      queries: {
+        retry: false,
+      },
     },
     queryCache: new QueryCache({
       onError: handleError,

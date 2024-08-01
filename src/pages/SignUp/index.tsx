@@ -2,14 +2,17 @@ import { TextLogoIcon } from '@assets';
 import Button from '@components/Button';
 import BaseInput from '@components/Input/BaseInput';
 import PasswordInput from '@components/Input/PasswordInput';
+import Popup from '@components/Popup';
 import { VALID_MAIL_REGEX } from '@constants/regex';
-import { KeyboardEvent } from 'react';
+import useRegister from '@hooks/api/userAPI/useRegister';
+import { isAxiosError } from 'axios';
+import { KeyboardEvent, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface FormValues {
   name: string;
-  id: string;
+  email: string;
   password: string;
   passwordConfirm: string;
 }
@@ -18,18 +21,41 @@ function SignInPage() {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors, isValid },
   } = useForm<FormValues>({
     defaultValues: {
       name: '',
-      id: '',
+      email: '',
       password: '',
       passwordConfirm: '',
     },
     mode: 'onChange',
   });
 
-  const onSubmit = (data: FormValues) => data;
+  const [isRegisterSuccess, setIsRegisterSuccess] = useState(false);
+  const navigate = useNavigate();
+
+  const onSuccess = () => {
+    setIsRegisterSuccess(true);
+  };
+  const onError = (err: Error) => {
+    if (isAxiosError(err) && err.response) {
+      if (err.response.status === 409) {
+        setError('email', {
+          type: 'manual',
+          message: '이미 사용중인 이메일입니다.',
+        });
+      }
+    }
+  };
+  const { mutate } = useRegister(onSuccess, onError);
+
+  const onSubmit = async (data: FormValues) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const { passwordConfirm, ...registerData } = data;
+    mutate(registerData);
+  };
 
   const preventSpace = (e: KeyboardEvent) => {
     if (e.key === ' ') {
@@ -73,27 +99,30 @@ function SignInPage() {
             )}
           </div>
           <div className="mt-6">
-            <label htmlFor="id" className="self-start text-base font-semibold">
+            <label
+              htmlFor="email"
+              className="self-start text-base font-semibold"
+            >
               이메일
             </label>
             <BaseInput
-              {...register('id', {
+              {...register('email', {
                 required: '이메일을 입력해주세요.',
                 pattern: {
                   value: VALID_MAIL_REGEX,
                   message: '유효한 이메일 주소를 입력해주세요.',
                 },
               })}
-              id="id"
+              id="email"
               size="lg"
-              isInvalid={!!errors.id}
+              isInvalid={!!errors.email}
               placeholder="이메일을 입력해주세요."
               additionalClass="mt-3"
               onKeyDown={preventSpace}
             />
-            {errors.id && (
+            {errors.email && (
               <p className="ml-4 mt-2 text-sm font-normal text-red-700">
-                {errors.id.message}
+                {errors.email.message}
               </p>
             )}
           </div>
@@ -172,6 +201,14 @@ function SignInPage() {
           </Link>
         </div>
       </div>
+      {isRegisterSuccess && (
+        <Popup
+          message="가입이 완료되었습니다!"
+          singleButton
+          onConfirm={() => navigate('/sign-in')}
+          onCancel={() => navigate('/sign-in')}
+        />
+      )}
     </div>
   );
 }

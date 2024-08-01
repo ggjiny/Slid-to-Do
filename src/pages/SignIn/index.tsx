@@ -3,12 +3,14 @@ import Button from '@components/Button';
 import BaseInput from '@components/Input/BaseInput';
 import PasswordInput from '@components/Input/PasswordInput';
 import { VALID_MAIL_REGEX } from '@constants/regex';
+import useLogin from '@hooks/api/authAPI/useLogin';
+import { AxiosResponse, isAxiosError } from 'axios';
 import { KeyboardEvent } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface FormValues {
-  id: string;
+  email: string;
   password: string;
 }
 function SignInPage() {
@@ -16,15 +18,44 @@ function SignInPage() {
     register,
     handleSubmit,
     control,
+    setError,
     formState: { errors },
   } = useForm<FormValues>({
     defaultValues: {
-      id: '',
+      email: '',
       password: '',
     },
   });
+  const navigate = useNavigate();
+  const onSuccess = (res: AxiosResponse) => {
+    localStorage.setItem('accessToken', res.data.accessToken);
+    localStorage.setItem('refreshToken', res.data.refreshToken);
+    navigate('/dashboard');
+  };
+  const onError = (err: Error) => {
+    if (isAxiosError(err) && err.response) {
+      if (err.response.status === 404) {
+        setError('email', {
+          type: 'manual',
+          message: '가입되지 않은 이메일입니다.',
+        });
+      }
+      if (
+        err.response.status === 400 &&
+        err.response.data.message === '비밀번호가 올바르지 않습니다.'
+      ) {
+        setError('password', {
+          type: 'manual',
+          message: '비밀번호가 올바르지 않습니다.',
+        });
+      }
+    }
+  };
+  const { mutate } = useLogin(onSuccess, onError);
 
-  const onSubmit = (data: FormValues) => data;
+  const onSubmit = (data: FormValues) => {
+    mutate(data);
+  };
 
   const preventSpace = (e: KeyboardEvent) => {
     if (e.key === ' ') {
@@ -33,7 +64,7 @@ function SignInPage() {
   };
 
   const password = useWatch({ control, name: 'password' });
-  const id = useWatch({ control, name: 'id' });
+  const id = useWatch({ control, name: 'email' });
 
   return (
     <div className="flex flex-col items-center pt-[48px] tablet:pt-[64px] desktop:pt-[120px]">
@@ -41,11 +72,14 @@ function SignInPage() {
         <TextLogoIcon width={270} height={89} />
         <form onSubmit={handleSubmit(onSubmit)} className="mt-[40px] w-full">
           <div>
-            <label htmlFor="id" className="self-start text-base font-semibold">
+            <label
+              htmlFor="email"
+              className="self-start text-base font-semibold"
+            >
               이메일
             </label>
             <BaseInput
-              {...register('id', {
+              {...register('email', {
                 required: '이메일을 입력해주세요.',
                 pattern: {
                   value: VALID_MAIL_REGEX,
@@ -54,14 +88,14 @@ function SignInPage() {
               })}
               id="id"
               size="lg"
-              isInvalid={!!errors.id}
+              isInvalid={!!errors.email}
               placeholder="이메일을 입력해주세요."
               additionalClass="mt-3"
               onKeyDown={preventSpace}
             />
-            {errors.id && (
+            {errors.email && (
               <p className="ml-4 mt-2 text-sm font-normal text-red-700">
-                {errors.id.message}
+                {errors.email.message}
               </p>
             )}
           </div>

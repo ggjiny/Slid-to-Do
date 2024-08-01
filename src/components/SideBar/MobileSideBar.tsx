@@ -20,7 +20,7 @@ function MobileSideBar({ isOpen, toggleSideBar }: MobileSideBarProps) {
         </button>
       </div>
       <div
-        className={`fixed left-0 top-0 z-10 h-dvh w-full px-6 py-4 ${isOpen ? 'translate-x-0' : '-translate-x-full'} bg-white transition-transform duration-300 ease-in-out`}
+        className={`fixed left-0 top-0 z-50 h-dvh w-full px-6 py-4 ${isOpen ? 'translate-x-0' : '-translate-x-full'} bg-white transition-transform duration-300 ease-in-out`}
       >
         <button
           type="button"

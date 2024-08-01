@@ -9,15 +9,20 @@ interface ErrorResponse {
 
 const useApiError = () => {
   const navigate = useNavigate();
-
   const handleError = useCallback(
     (error: Error) => {
+      if (axios.isAxiosError(error) && error.code === 'ERR_CANCELED') {
+        navigate('/sign-in');
+        showErrorToast('로그인이 필요합니다.');
+        return;
+      }
       if (axios.isAxiosError(error) && error.response) {
         const httpStatus = error.response.status;
         const { message } = error.response.data as ErrorResponse;
 
         if (message) {
           if (message === 'Unauthorized') {
+            showErrorToast('로그인이 필요합니다.');
             navigate('/sign-in');
           } else {
             showErrorToast(message);
