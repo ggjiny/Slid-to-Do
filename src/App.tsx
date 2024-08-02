@@ -27,7 +27,9 @@ function App() {
   const { pathname } = useLocation();
 
   const bgColor =
-    pathname === '/sign-in' || pathname === '/sign-up'
+    pathname === '/sign-in' ||
+    pathname === '/sign-up' ||
+    pathname === '/notes/new'
       ? 'bg-white'
       : 'bg-slate-200';
 

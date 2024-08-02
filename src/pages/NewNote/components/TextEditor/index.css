@@ -113,6 +113,10 @@
   padding-left: 1rem;
 }
 
+.ProseMirror {
+  padding-bottom: 80px;
+}
+
 .ProseMirror-focused {
   outline: none;
 }

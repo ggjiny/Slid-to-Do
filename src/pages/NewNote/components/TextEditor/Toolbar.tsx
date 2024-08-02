@@ -21,7 +21,7 @@ function Toolbar({ editor }: ToolbarProps) {
   const DEFAULT_FILL_COLOR = 'fill-slate-700';
 
   return (
-    <div className="flex justify-between rounded-[21.5px] border border-slate-200 bg-white px-4 py-[10px] shadow-xs">
+    <div className="fixed bottom-6 z-10 flex w-full max-w-[792px] justify-between rounded-[21.5px] border border-slate-200 bg-white px-4 py-[10px] shadow-xs">
       <div className="flex gap-4">
         <div className="flex gap-1">
           <BoldIcon

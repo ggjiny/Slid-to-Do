@@ -4,7 +4,7 @@ import NoteList from './components/NoteList';
 function NotesPage() {
   return (
     <div className="flex items-center justify-center desktop:block">
-      <div className="w-full max-w-[792px] px-4 desktop:ml-[360px]">
+      <div className="mx-4 w-full max-w-[792px] desktop:ml-[360px]">
         <h1 className="mb-4 pt-6 text-lg font-semibold leading-7 text-slate-900">
           노트 모아보기
         </h1>
