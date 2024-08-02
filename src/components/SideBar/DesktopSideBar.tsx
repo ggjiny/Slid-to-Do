@@ -10,7 +10,7 @@ interface SideBarProps {
 function DesktopSideBar({ isOpen, width, toggleSideBar }: SideBarProps) {
   return (
     <>
-      {isOpen && width <= 1920 && (
+      {isOpen && width < 1920 && (
         <div
           className="fixed left-0 top-0 z-40 h-dvh w-dvw bg-black opacity-50"
           onClick={toggleSideBar}

@@ -1,5 +1,5 @@
 import useWindowWidth from '@hooks/useWindowWidth';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DesktopSideBar from './DesktopSideBar';
 import MobileSideBar from './MobileSideBar';
 
@@ -8,6 +8,13 @@ function SideBar() {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleSidebar = () => setIsOpen((prev) => !prev);
+  useEffect(() => {
+    if (width >= 1920) {
+      setIsOpen(true);
+    } else {
+      setIsOpen(false);
+    }
+  }, [width]);
 
   return (
     <>

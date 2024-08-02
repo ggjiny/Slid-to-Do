@@ -48,20 +48,22 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => response,
-  (error) => {
-    const refreshToken = localStorage.getItem('refreshToken');
-    const originalRequest = error.config as AxiosRequestConfig;
-    if (refreshToken) {
-      return authAPI
-        .getTokens(refreshToken)
-        .then(async (res) => {
-          // 실패한 호출 재실행
-          localStorage.setItem('accessToken', res.data.accessToken);
-          localStorage.setItem('refreshToken', res.data.refreshToken);
-          const retry = await axiosInstance(originalRequest);
-          return retry;
-        })
-        .catch(() => Promise.reject(error));
+  async (error) => {
+    if (error.response?.status === 401) {
+      const refreshToken = localStorage.getItem('refreshToken');
+      const originalRequest = error.config as AxiosRequestConfig;
+      if (refreshToken) {
+        return authAPI
+          .getTokens(refreshToken)
+          .then(async (res) => {
+            // 실패한 호출 재실행
+            localStorage.setItem('accessToken', res.data.accessToken);
+            localStorage.setItem('refreshToken', res.data.refreshToken);
+            const retry = await axiosInstance(originalRequest);
+            return retry;
+          })
+          .catch(() => Promise.reject(error));
+      }
     }
     return Promise.reject(error);
   },
