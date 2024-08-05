@@ -16,8 +16,11 @@ const useApiError = () => {
         showErrorToast('로그인이 필요합니다.');
         return;
       }
+      if (axios.isAxiosError(error) && error.code === 'ERR_BAD_RESPONSE') {
+        showErrorToast('서버 에러가 발생했습니다.');
+        return;
+      }
       if (axios.isAxiosError(error) && error.response) {
-        const httpStatus = error.response.status;
         const { message } = error.response.data as ErrorResponse;
 
         if (message) {
@@ -27,11 +30,6 @@ const useApiError = () => {
           } else {
             showErrorToast(message);
           }
-          return;
-        }
-
-        if (httpStatus >= 500) {
-          showErrorToast('서버 에러가 발생했습니다.');
           return;
         }
       }
