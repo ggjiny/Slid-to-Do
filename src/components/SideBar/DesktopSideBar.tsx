@@ -55,6 +55,7 @@ function DesktopSideBar({
             goalData={goalData}
             toggleSideBar={toggleSideBar}
             handleShowTodoModal={handleShowTodoModal}
+            width={width}
           />
         )}
       </div>

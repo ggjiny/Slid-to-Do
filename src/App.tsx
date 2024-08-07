@@ -37,7 +37,9 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (pathname === '/') {
+    if (localStorage.getItem('accessToken') === null) {
+      navigate('sign-in');
+    } else {
       navigate('dashboard');
     }
   }, []);

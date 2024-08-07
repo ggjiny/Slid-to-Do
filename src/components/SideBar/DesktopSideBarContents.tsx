@@ -12,6 +12,7 @@ import { MouseEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface DesktopSideBarContentsProps {
+  width: number;
   userData: { name: string; email: string };
   goalData: { title: string; id: number }[];
   toggleSideBar: () => void;
@@ -23,6 +24,7 @@ function DesktopSideBarContents({
   goalData,
   toggleSideBar,
   handleShowTodoModal,
+  width,
 }: DesktopSideBarContentsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newGoal, setNewGoal] = useState('');
@@ -49,7 +51,7 @@ function DesktopSideBarContents({
         className="cursor-pointer"
         onClick={() => {
           navigate('/dashboard');
-          toggleSideBar();
+          if (width < 1920) toggleSideBar();
         }}
       />
       <div className="mt-4 flex flex-row">
@@ -91,7 +93,7 @@ function DesktopSideBarContents({
         className="my-4 mt-10 flex h-8 cursor-pointer flex-row items-center"
         onClick={() => {
           navigate('/dashboard');
-          toggleSideBar();
+          if (width < 1920) toggleSideBar();
         }}
       >
         <HomeIcon width={24} height={24} />
@@ -107,7 +109,7 @@ function DesktopSideBarContents({
           <div
             onClick={() => {
               navigate('/goal-detail');
-              toggleSideBar();
+              if (width < 1920) toggleSideBar();
             }}
           >
             <li

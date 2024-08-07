@@ -22,7 +22,7 @@ function SideBar() {
   const { data: goalData } = useGetGoals();
 
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && width < 1920) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = 'unset';
