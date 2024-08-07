@@ -6,18 +6,28 @@ import {
   TextLogoIcon,
 } from '@assets';
 import Button from '@components/Button';
+import usePostGoal from '@hooks/api/goalsAPI/usePostGoal';
 import useOutsideClick from '@hooks/useOutsideClick';
-import { MouseEvent, useRef, useState } from 'react';
+import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function DesktopSideBarContents() {
+interface DesktopSideBarContentsProps {
+  userData: { name: string; email: string };
+  goalData: { title: string; id: number }[];
+  toggleSideBar: () => void;
+  handleShowTodoModal: () => void;
+}
+
+function DesktopSideBarContents({
+  userData,
+  goalData,
+  toggleSideBar,
+  handleShowTodoModal,
+}: DesktopSideBarContentsProps) {
   const [isEditing, setIsEditing] = useState(false);
-  const inputRef = useRef(null);
-  const mockGoalData = {
-    goals: [
-      { title: '자바스크립트로 웹 서비스 만들기', id: 1 },
-      { title: '디자인 시스템 강의 듣기', id: 2 },
-    ],
-  };
+  const [newGoal, setNewGoal] = useState('');
+  const inputRef = useRef<HTMLInputElement>(null);
+  const navigate = useNavigate();
   useOutsideClick(inputRef, () => setIsEditing(false));
 
   const handleAddGoalBtn = (e: MouseEvent) => {
@@ -25,19 +35,40 @@ function DesktopSideBarContents() {
     setIsEditing(true);
   };
 
+  useEffect(() => {
+    if (isEditing && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [isEditing]);
+
+  const { mutate, isPending } = usePostGoal();
+
   return (
     <div className="flex-col">
-      <TextLogoIcon />
+      <TextLogoIcon
+        className="cursor-pointer"
+        onClick={() => {
+          navigate('/dashboard');
+          toggleSideBar();
+        }}
+      />
       <div className="mt-4 flex flex-row">
         <ProfileIcon width={64} height={64} />
         <div className="ml-3 flex flex-col items-start justify-between">
           <div className="h-4 text-sm font-semibold leading-5 text-slate-800">
-            체다치즈
+            {userData.name}
           </div>
           <div className="h-4 text-sm font-medium leading-5 text-slate-600">
-            chedacheese@slid.kr
+            {userData.email}
           </div>
-          <button type="button">
+          <button
+            type="button"
+            onClick={() => {
+              localStorage.removeItem('accessToken');
+              localStorage.removeItem('refreshToken');
+              navigate('/sign-in');
+            }}
+          >
             <span className="text-xs font-normal leading-4 text-slate-400">
               로그아웃
             </span>
@@ -45,13 +76,24 @@ function DesktopSideBarContents() {
         </div>
       </div>
       <div className="my-6 flex justify-center">
-        <Button shape="solid" size="sm" additionalClass="w-full">
+        <Button
+          shape="solid"
+          size="sm"
+          additionalClass="w-full"
+          onClick={handleShowTodoModal}
+        >
           <PlusIcon width={24} height={24} className="mr-2 stroke-white" />
           <span className="mr-2 text-base font-semibold">새 할 일</span>
         </Button>
       </div>
       <div className="absolute left-0 w-full border-b-[1px]"> </div>
-      <div className="my-4 mt-10 flex h-8 flex-row items-center">
+      <div
+        className="my-4 mt-10 flex h-8 cursor-pointer flex-row items-center"
+        onClick={() => {
+          navigate('/dashboard');
+          toggleSideBar();
+        }}
+      >
         <HomeIcon width={24} height={24} />
         <div className="ml-2 text-lg font-medium text-slate-800">대시보드</div>
       </div>
@@ -61,11 +103,26 @@ function DesktopSideBarContents() {
         <div className="ml-2 text-lg font-medium text-slate-800">목표</div>
       </div>
       <ul>
-        {mockGoalData.goals.map((item) => (
-          <li key={item.id} className="p-2 text-sm font-medium text-slate-700">
-            • {item.title}
-          </li>
+        {goalData.map((item) => (
+          <div
+            onClick={() => {
+              navigate('/goal-detail');
+              toggleSideBar();
+            }}
+          >
+            <li
+              key={item.id}
+              className="cursor-pointer p-2 text-sm font-medium text-slate-700"
+            >
+              • {item.title}
+            </li>
+          </div>
         ))}
+        {isPending && (
+          <li className="p-2 text-sm font-medium text-slate-700">
+            • {newGoal}
+          </li>
+        )}
         {isEditing && (
           <li className="flex items-center p-2 text-sm font-medium text-slate-700">
             <span>•</span>
@@ -73,10 +130,12 @@ function DesktopSideBarContents() {
               ref={inputRef}
               className="ml-1 h-8 w-max flex-grow rounded-md border border-gray-300 p-2 text-sm"
               placeholder="새 목표를 입력해주세요"
+              value={newGoal}
+              onChange={(e) => setNewGoal(e.target.value)}
               onKeyDown={(event) => {
-                // TODO: 엔터키 입력 시 목표 추가
                 if (event.key === 'Enter') {
                   setIsEditing(false);
+                  mutate(newGoal);
                 }
               }}
             />
@@ -97,7 +156,6 @@ function DesktopSideBarContents() {
             height={24}
             className={`mr-2 ${isEditing ? 'stroke-slate-400' : 'stroke-blue-500'}`}
           />
-
           <span className="mr-2 text-base font-semibold">새 목표</span>
         </Button>
       </div>
