@@ -1,7 +1,6 @@
 import { FontColorIcon } from '@assets';
 import useOutsideClick from '@hooks/useOutsideClick';
 import { Editor } from '@tiptap/react';
-import cn from '@utils/cn';
 import { useRef, useState } from 'react';
 
 interface FontColorButtonProps {
@@ -19,19 +18,19 @@ function FontColorButton({ editor, defaultColor }: FontColorButtonProps) {
     editor.chain().focus().setColor(color).run();
     switch (color) {
       case '#334155':
-        setCurrentColor('slate-700');
+        setCurrentColor('fill-slate-700');
         break;
       case '#ef4444':
-        setCurrentColor('red-500');
+        setCurrentColor('fill-red-500');
         break;
       case '#22c55e':
-        setCurrentColor('green-500');
+        setCurrentColor('fill-green-500');
         break;
       case '#1d4ed8':
-        setCurrentColor('blue-700');
+        setCurrentColor('fill-blue-700');
         break;
       case '#facc15':
-        setCurrentColor('yellow-400');
+        setCurrentColor('fill-yellow-400');
         break;
       default:
         setCurrentColor(defaultColor);
@@ -43,13 +42,10 @@ function FontColorButton({ editor, defaultColor }: FontColorButtonProps) {
     <div ref={dropdownRef} className="relative">
       <FontColorIcon
         onClick={() => setIsDropdownOpen((prev) => !prev)}
-        className={cn(
-          `${currentColor ? `fill-${currentColor}` : defaultColor}`,
-          `cursor-pointer`,
-        )}
+        className={`${currentColor || defaultColor} cursor-pointer`}
       />
       {isDropdownOpen && (
-        <div className="absolute top-6 z-10 flex w-fit gap-1 rounded-md border border-slate-300 bg-white p-2">
+        <div className="absolute bottom-6 z-10 flex w-fit gap-1 rounded-md border border-slate-300 bg-white p-2">
           <div
             onClick={() => handleClickColor('#334155')}
             className="h-3 w-3 cursor-pointer rounded-full bg-slate-700"

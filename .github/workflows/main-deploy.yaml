@@ -1,0 +1,53 @@
+name: Deploy to AWS
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Cache node modules
+        uses: actions/cache@v4
+        id: cache
+        with:
+          path: node_modules
+          key: npm-packages-${{hashFiles('**/package-lock.json')}}
+          restore-keys: |
+            npm-packages-
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build the project
+        run: npm run build
+
+      # aws 자격 증명 설정
+      - name: Aws credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_S3_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_S3_SECRET_ACCESS_KEY_ID }}
+          aws-region: ap-northeast-2
+
+      # 빌드된 파일 aws s3 버킷에 동기화
+      - name: Deploy to S3
+        run: aws s3 sync build/ s3://${{ secrets.AWS_S3_BUCKET_NAME }} --delete
+        working-directory: ./
+
+      # cloudfront로 배포되는 파일은 기본 설정 상 24시간동안 캐시가 유지됨
+      # 배포 후 s3에는 정적 리소스가 올라가있지만 엣지 로케이션엔 이전 파일이 올라가 있는 상태
+      # 바로 변화가 반영되기 위한 캐시 무효화
+      - name: Invalidate CloudFront cache
+        run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_CLOUDFRONT_DISTRIBUTION_ID }} --paths "/*"
