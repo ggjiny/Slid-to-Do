@@ -3,13 +3,10 @@ import { ChangeEvent } from 'react';
 
 interface FileUploadButtonProps {
   fileUrl: string | null;
-  handleFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
+  onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
 }
 
-function FileUploadButton({
-  fileUrl,
-  handleFileChange,
-}: FileUploadButtonProps) {
+function FileUploadButton({ fileUrl, onFileChange }: FileUploadButtonProps) {
   return (
     <button
       type="button"
@@ -40,7 +37,7 @@ function FileUploadButton({
         type="file"
         id="fileInput"
         className="hidden"
-        onChange={handleFileChange}
+        onChange={onFileChange}
       />
     </button>
   );

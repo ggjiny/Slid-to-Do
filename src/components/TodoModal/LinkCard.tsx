@@ -2,10 +2,10 @@ import { GrayDelete } from '@assets';
 
 interface LinkCardProps {
   linkUrl: string;
-  handleLinkDelete: () => void;
+  onLinkDelete: () => void;
 }
 
-function LinkCard({ linkUrl, handleLinkDelete }: LinkCardProps) {
+function LinkCard({ linkUrl, onLinkDelete }: LinkCardProps) {
   return (
     <a
       href={linkUrl}
@@ -24,7 +24,7 @@ function LinkCard({ linkUrl, handleLinkDelete }: LinkCardProps) {
           className="relative h-6 w-6"
           onClick={(e) => {
             e.preventDefault();
-            handleLinkDelete();
+            onLinkDelete();
           }}
           aria-label="Link Delete"
         >

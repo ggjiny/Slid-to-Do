@@ -4,11 +4,12 @@ import { useEffect, useState } from 'react';
 function useTodoDetail(todo: Todo) {
   const [done, setDone] = useState(todo.done);
   const [title, setTitle] = useState(todo.title);
-  const [goal, setGoal] = useState(todo.goal);
   const [fileUrl, setFileUrl] = useState(todo.fileUrl);
-  const [file, setFile] = useState<File | null>(null);
   const [linkUrl, setLinkUrl] = useState(todo.linkUrl);
   const [isModified, setIsModified] = useState(false);
+  const [goal, setGoal] = useState<{ id: number; title: string } | null>(
+    todo.goal,
+  );
 
   useEffect(() => {
     const isTitleChanged = title !== todo.title;
@@ -31,14 +32,12 @@ function useTodoDetail(todo: Todo) {
     title,
     goal,
     fileUrl,
-    file,
     linkUrl,
     isModified,
     setDone,
     setTitle,
     setGoal,
     setFileUrl,
-    setFile,
     setLinkUrl,
   };
 }

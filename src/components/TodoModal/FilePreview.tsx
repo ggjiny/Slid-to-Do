@@ -1,26 +1,32 @@
+import getFileType from '@utils/getFileType';
+import { Document, Page, pdfjs } from 'react-pdf';
+
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+
 interface FilePreviewProps {
   fileUrl: string;
-  file: File;
 }
 
-function FilePreview({ fileUrl, file }: FilePreviewProps) {
-  if (file.type === 'application/pdf') {
+function FilePreview({ fileUrl }: FilePreviewProps) {
+  const fileType = getFileType(fileUrl);
+
+  if (fileType === 'pdf') {
     return (
-      <embed
-        src={fileUrl}
-        type="application/pdf"
-        style={{
-          maxWidth: '100%',
-          maxHeight: '100%',
-          borderRadius: '20px',
-          objectFit: 'contain',
-        }}
-        aria-label="PDF Document"
-      />
+      <Document
+        file={`https://corsproxy.io/?${fileUrl}`} // 나중에 도메인 연결하면 CORS 수정 요청 드릴 생각입니다
+        loading="PDF 미리보기 로딩 중..."
+      >
+        <Page
+          pageNumber={1}
+          height={160}
+          renderAnnotationLayer={false}
+          renderTextLayer={false}
+        />
+      </Document>
     );
   }
 
-  if (file.type.startsWith('image/')) {
+  if (fileType === 'image') {
     return (
       <img
         src={fileUrl}
@@ -30,7 +36,7 @@ function FilePreview({ fileUrl, file }: FilePreviewProps) {
     );
   }
 
-  if (file.type === 'video/mp4' || file.type === 'video/quicktime') {
+  if (fileType === 'video') {
     return (
       <video
         src={fileUrl}
@@ -42,13 +48,7 @@ function FilePreview({ fileUrl, file }: FilePreviewProps) {
     );
   }
 
-  return (
-    <div className="max-h-full max-w-full rounded-[20px] text-center text-xs text-slate-400 tablet:text-base">
-      미리보기가 지원되지 않는 파일 형식입니다.
-      <br />
-      {file.name}
-    </div>
-  );
+  return null;
 }
 
 export default FilePreview;

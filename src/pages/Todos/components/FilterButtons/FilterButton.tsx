@@ -14,7 +14,7 @@ function FilterButton({ label, isSelected, onClick }: FilterButtonProps) {
       type="button"
     >
       <div
-        className={`text-sm font-medium leading-tight ${
+        className={`whitespace-nowrap text-sm font-medium leading-tight ${
           isSelected ? 'text-white' : 'text-slate-800'
         }`}
       >
