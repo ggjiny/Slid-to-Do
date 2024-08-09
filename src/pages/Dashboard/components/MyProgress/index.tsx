@@ -1,8 +1,10 @@
 import { ProgressEllipseIcon, ProgressIcon } from '@assets';
+import useGetProgress from '@hooks/api/todosAPI/useGetProgress';
 import { PieChart } from '@mui/x-charts/PieChart';
 
 function MyProgress() {
-  const progress = 30;
+  const { data } = useGetProgress();
+  const progress = data?.data.progress || 0;
 
   const options = {
     data: [

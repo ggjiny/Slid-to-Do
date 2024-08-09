@@ -9,9 +9,6 @@ function GoalDetailPage() {
   const todos = mockTodosData.filter((todo: Todo) => !todo.done);
   const dones = mockTodosData.filter((todo: Todo) => todo.done);
 
-  const handleToggleDone = (id: number) => id;
-  const handleTodoClick = (todo: Todo) => todo;
-
   return (
     <div className="flex min-h-screen justify-center bg-slate-100 desktop:min-w-[1920px]">
       <div className="flex w-[375px] flex-col pb-16 text-slate-800 tablet:w-[637px] desktop:w-[1200px]">
@@ -35,15 +32,11 @@ function GoalDetailPage() {
               title="To do"
               placeholder="아직 해야할 일이 없어요"
               todos={todos}
-              onToggleDone={handleToggleDone}
-              onTodoClick={handleTodoClick}
             />
             <TodoBox
               title="Done"
               placeholder="아직 다 한 일이 없어요"
               todos={dones}
-              onToggleDone={handleToggleDone}
-              onTodoClick={handleTodoClick}
             />
           </div>
         </div>

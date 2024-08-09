@@ -1,28 +1,32 @@
 import { Todo } from '@/types/interface';
 import { ArrowRightIcon, TodoRecentlyIcon } from '@assets';
-import TodoList from '@components/TodoList';
-import { useState } from 'react';
-import { mockTodosData } from '../mockData';
+import LoadingAnimation from '@components/LoadingAnimation';
+import TodoItem from '@components/TodoItem';
+import useGetTodos from '@hooks/api/todosAPI/useGetTodos';
+import { Link } from 'react-router-dom';
 
 function RecentTodos() {
-  const todosData = mockTodosData
-    .sort((a, b) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return dateA - dateB;
-    })
-    .slice(0, 4);
-  const [todosState, setTodosState] = useState(todosData);
+  const { data, isLoading } = useGetTodos({ size: 4 });
+  const todosData = data?.pages[0].data;
 
-  const handleToggleDone = (id: number) => {
-    setTodosState(
-      todosState.map((todo) =>
-        todo.id === id ? { ...todo, done: !todo.done } : todo,
-      ),
+  let content;
+  if (isLoading) {
+    content = (
+      <div className="mt-14 flex w-full items-center justify-center">
+        <LoadingAnimation />
+      </div>
     );
-  };
-
-  const handleTodoClick = (todo: Todo) => todo;
+  } else if (todosData && todosData.totalCount > 0) {
+    content = todosData.todos.map((todo: Todo) => (
+      <TodoItem key={todo.id} todo={todo} showGoals />
+    ));
+  } else {
+    content = (
+      <div className="mt-16 flex w-full justify-center text-sm font-normal text-slate-500">
+        최근에 등록한 할 일이 없어요
+      </div>
+    );
+  }
 
   return (
     <div className="h-[250px] rounded-xl bg-white px-6 py-4">
@@ -33,27 +37,14 @@ function RecentTodos() {
             최근 등록한 할 일
           </div>
         </div>
-        <button type="button" className="flex items-center">
+        <Link to="/todos" className="flex items-center">
           <div className="text-sm font-medium leading-5 text-slate-600">
             모두보기
           </div>
           <ArrowRightIcon />
-        </button>
+        </Link>
       </div>
-      <div className="mt-4 h-[159px] overflow-y-auto">
-        {todosData && todosData.length > 0 ? (
-          <TodoList
-            todos={todosState}
-            onToggleDone={handleToggleDone}
-            showGoals
-            onTodoClick={handleTodoClick}
-          />
-        ) : (
-          <div className="mt-16 flex w-full justify-center text-sm font-normal text-slate-500">
-            최근에 등록한 할 일이 없어요
-          </div>
-        )}
-      </div>
+      <div className="mt-4 h-[159px] overflow-y-auto">{content}</div>
     </div>
   );
 }
