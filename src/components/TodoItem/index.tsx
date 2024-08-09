@@ -143,7 +143,11 @@ function TodoItem({
         <TodoDetailModal todo={todo} onClose={() => setIsModalOpen(false)} />
       )}
       {isNoteDetailOpen && (
-        <NoteDetail onClose={() => setIsNoteDetailOpen(false)} /> // 노트 상세 보기 prop 변경 예정
+        <NoteDetail
+          onClose={() => setIsNoteDetailOpen(false)}
+          // 예외처리 필요합니당.
+          noteId={todo.noteId ? todo.noteId : 0}
+        /> // 노트 상세 보기 prop 변경 예정
       )}
     </>
   );

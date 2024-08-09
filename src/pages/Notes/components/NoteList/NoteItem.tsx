@@ -2,6 +2,7 @@ import { Note } from '@/types/interface';
 import { NoteListIcon } from '@assets';
 import Kebab from '@components/Kebab';
 import NoteDetail from '@components/NoteDetail';
+import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import { useState } from 'react';
 
 interface NoteItemProps {
@@ -10,7 +11,7 @@ interface NoteItemProps {
 
 function NoteItem({ noteData }: NoteItemProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-
+  const { mutate: deleteNote } = useDeleteNote();
   const handleClickNote = () => {
     setIsDetailOpen(true);
   };
@@ -24,7 +25,7 @@ function NoteItem({ noteData }: NoteItemProps) {
   };
 
   const handleDeleteNote = () => {
-    // 노트 아이디를 통해 식제
+    deleteNote(noteData.id);
   };
 
   return (
@@ -53,7 +54,9 @@ function NoteItem({ noteData }: NoteItemProps) {
           </p>
         </div>
       </div>
-      {isDetailOpen && <NoteDetail onClose={handleCloseNote} />}
+      {isDetailOpen && (
+        <NoteDetail onClose={handleCloseNote} noteId={noteData.id} />
+      )}
     </>
   );
 }

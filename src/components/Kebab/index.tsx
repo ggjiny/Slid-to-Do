@@ -19,12 +19,14 @@ function Kebab({ onEdit, onDelete, isSmall = false }: KebabProps) {
 
   useOutsideClick(popOverRef, () => setIsPopOverOpen(false));
 
-  const handleEditClick = () => {
+  const handleEditClick = (e: MouseEvent) => {
+    e.stopPropagation();
     onEdit();
     setIsPopOverOpen(false);
   };
 
-  const handleDeleteClick = () => {
+  const handleDeleteClick = (e: MouseEvent) => {
+    e.stopPropagation();
     onDelete();
     setIsPopOverOpen(false);
   };
