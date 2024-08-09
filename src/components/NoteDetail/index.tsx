@@ -1,4 +1,4 @@
-import { DeleteIcon, FlagIcon, GrayDelete } from '@assets';
+import { CircleDeleteIcon, DeleteIcon, FlagIcon } from '@assets';
 import Kebab from '@components/Kebab';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import useGetNote from '@hooks/api/notesAPI/useGetNote';
@@ -96,7 +96,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
             {noteData.data.linkUrl ? (
               <div className="mb-4 flex justify-between rounded-[20px] bg-slate-200 py-1 pl-4 pr-[6px]">
                 {noteData.data.linkUrl}
-                <GrayDelete className="cursor-pointer" />
+                <CircleDeleteIcon className="cursor-pointer fill-slate-500" />
               </div>
             ) : (
               <div className="pt-1" />

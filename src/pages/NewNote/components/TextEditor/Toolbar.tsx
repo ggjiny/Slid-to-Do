@@ -14,9 +14,10 @@ import LinkButton from './LinkButton';
 
 interface ToolbarProps {
   editor: Editor;
+  onChangeLink: (link: string) => void;
 }
 
-function Toolbar({ editor }: ToolbarProps) {
+function Toolbar({ editor, onChangeLink }: ToolbarProps) {
   const ACTIVE_FILL_COLOR = 'fill-blue-600';
   const DEFAULT_FILL_COLOR = 'fill-slate-700';
 
@@ -63,7 +64,7 @@ function Toolbar({ editor }: ToolbarProps) {
           <FontColorButton editor={editor} defaultColor={DEFAULT_FILL_COLOR} />
         </div>
       </div>
-      <LinkButton />
+      <LinkButton onChangeLink={onChangeLink} />
     </div>
   );
 }

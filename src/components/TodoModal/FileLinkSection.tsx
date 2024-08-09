@@ -1,4 +1,4 @@
-import { GrayDelete } from '@assets';
+import { CircleDeleteIcon } from '@assets';
 import { ChangeEvent } from 'react';
 import FilePreview from './FilePreview';
 import FileUploadButton from './FileUploadButton';
@@ -43,7 +43,11 @@ function FileLinkSection({
             onClick={onFileDelete}
             aria-label="File Delete"
           >
-            <GrayDelete width={18} height={18} />
+            <CircleDeleteIcon
+              width={18}
+              height={18}
+              className="fill-slate-500"
+            />
           </button>
         </div>
       )}

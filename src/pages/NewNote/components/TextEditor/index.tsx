@@ -14,11 +14,18 @@ import Toolbar from './Toolbar';
 import './index.css';
 
 interface TextEditorProps {
-  onContentChange: (text: string, content: string) => void;
+  prevContent: string;
+  onChangeContent: (text: string, content: string) => void;
+  onChangeLink: (link: string) => void;
 }
 
-function TextEditor({ onContentChange }: TextEditorProps) {
+function TextEditor({
+  prevContent,
+  onChangeContent,
+  onChangeLink,
+}: TextEditorProps) {
   const editor = useEditor({
+    content: prevContent,
     extensions: [
       StarterKit,
       Typography,
@@ -36,12 +43,18 @@ function TextEditor({ onContentChange }: TextEditorProps) {
   });
 
   useEffect(() => {
+    if (editor && prevContent !== editor.getHTML()) {
+      editor.commands.setContent(prevContent);
+    }
+  }, [editor, prevContent]);
+
+  useEffect(() => {
     if (!editor) return undefined;
 
     const handleUpdate = () => {
       const text = editor.getText();
       const content = editor.getHTML();
-      onContentChange(text, content);
+      onChangeContent(text, content);
     };
 
     editor.on('update', handleUpdate);
@@ -49,11 +62,12 @@ function TextEditor({ onContentChange }: TextEditorProps) {
     return () => {
       editor.off('update', handleUpdate);
     };
-  }, [editor, onContentChange]);
+  }, [editor, onChangeContent]);
 
   return (
     <div className="mb-8 flex-grow">
-      {editor && <Toolbar editor={editor} />}
+      {editor && <Toolbar editor={editor} onChangeLink={onChangeLink} />}
+
       <EditorContent
         editor={editor}
         className="overflow-auto bg-white text-slate-700"

@@ -9,8 +9,8 @@ export { ReactComponent as ActiveWhite } from './activeWhite.svg';
 export { ReactComponent as Inactive } from './inactive.svg';
 
 export { ReactComponent as ArrowDropdownIcon } from './arrowDropdown.svg';
+export { ReactComponent as CircleDeleteIcon } from './circleDelete.svg';
 export { ReactComponent as DeleteIcon } from './delete.svg';
-export { ReactComponent as GrayDelete } from './grayDelete.svg';
 export { ReactComponent as PlusIcon } from './plus.svg';
 export { ReactComponent as PlusBlueIcon } from './plusBlue.svg';
 
@@ -47,6 +47,8 @@ export { ReactComponent as AlignLeftIcon } from './alignLeft.svg';
 export { ReactComponent as AlignRightIcon } from './alignRight.svg';
 export { ReactComponent as BoldIcon } from './bold.svg';
 export { ReactComponent as BulletIcon } from './bullet.svg';
+export { ReactComponent as CheckIcon } from './check.svg';
+export { ReactComponent as EmbedIcon } from './embed.svg';
 export { ReactComponent as FontColorIcon } from './fontColor.svg';
 export { ReactComponent as ItalicIcon } from './italic.svg';
 export { ReactComponent as NumberListIcon } from './numberList.svg';

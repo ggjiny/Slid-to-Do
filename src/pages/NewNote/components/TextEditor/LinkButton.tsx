@@ -2,14 +2,14 @@ import { LinkIcon } from '@assets';
 import LinkModal from '@components/LinkModal';
 import { useState } from 'react';
 
-function LinkButton() {
+interface LinkButtonProps {
+  onChangeLink: (link: string) => void;
+}
+
+function LinkButton({ onChangeLink }: LinkButtonProps) {
   const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const handleClickLinkIcon = () => {
     setIsLinkModalOpen(true);
-  };
-
-  const handleUploadLink = () => {
-    // 링크 업로드 로직
   };
 
   return (
@@ -20,7 +20,10 @@ function LinkButton() {
       />
       {isLinkModalOpen && (
         <LinkModal
-          onConfirm={handleUploadLink}
+          onConfirm={(link: string) => {
+            onChangeLink(link);
+            setIsLinkModalOpen(false);
+          }}
           onCancel={() => setIsLinkModalOpen(false)}
           fullscreen
         />

@@ -1,4 +1,4 @@
-import { GrayDelete } from '@assets';
+import { CircleDeleteIcon } from '@assets';
 
 interface LinkCardProps {
   linkUrl: string;
@@ -28,7 +28,7 @@ function LinkCard({ linkUrl, onLinkDelete }: LinkCardProps) {
           }}
           aria-label="Link Delete"
         >
-          <GrayDelete width={18} height={18} />
+          <CircleDeleteIcon width={18} height={18} className="fill-slate-500" />
         </button>
       </div>
     </a>

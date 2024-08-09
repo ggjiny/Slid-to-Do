@@ -21,22 +21,29 @@ export interface Todo {
   createdAt: string;
 }
 
-export interface Note_Todo {
+export interface NoteTodo {
   done: boolean;
   title: string;
   id: number;
 }
 
-export interface Note_Goal {
+export interface NoteGoal {
   title: string;
   id: number;
 }
 
 export interface Note {
-  todo: Note_Todo;
+  todo: NoteTodo;
   updatedAt: string;
   createdAt: string;
   title: string;
   id: number;
-  goal: Note_Goal;
+  goal: NoteGoal;
+}
+
+export interface NoteDraft {
+  todo: Todo;
+  title: string;
+  content: string;
+  link: string;
 }
