@@ -1,10 +1,5 @@
+import { CreateNote, UpdateNote } from '@/types/interface';
 import axiosInstance from './axiosInstance';
-
-export interface UpdateNote {
-  title?: string;
-  content?: string;
-  linkUrl?: string | null;
-}
 
 const getNotes = async (goalId?: number, cursor?: number, size = 20) => {
   const response = await axiosInstance({
@@ -15,16 +10,11 @@ const getNotes = async (goalId?: number, cursor?: number, size = 20) => {
   return response;
 };
 
-const postNote = async (
-  todoId: number,
-  title: string,
-  content: string,
-  linkUrl?: string,
-) => {
+const postNote = async (todoId: number, note: CreateNote) => {
   const response = await axiosInstance({
     url: '/notes',
     method: 'post',
-    data: { todoId, title, content, linkUrl },
+    data: { todoId, ...note },
   });
   return response;
 };

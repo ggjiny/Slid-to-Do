@@ -5,7 +5,10 @@ const useDeleteNote = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (noteId: number) => notesAPI.deleteNote(noteId),
-    onSettled: () => queryClient.invalidateQueries({ queryKey: ['notes'] }),
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ['notes'] });
+      queryClient.invalidateQueries({ queryKey: ['todos'] });
+    },
   });
 };
 

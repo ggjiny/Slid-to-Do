@@ -68,7 +68,7 @@ function IconButtons({ todo, setIsNoteDetailOpen }: IconButtonsProps) {
       ) : (
         <Link
           to="/notes/new"
-          state={todo}
+          state={{ todo }}
           className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-slate-50"
           onClick={(e) => {
             e.stopPropagation();

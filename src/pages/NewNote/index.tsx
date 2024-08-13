@@ -1,37 +1,28 @@
 import { NoteDraft } from '@/types/interface';
-import { FlagIcon } from '@assets';
-import Popup from '@components/Popup';
+import usePatchNote from '@hooks/api/notesAPI/usePatchNote';
+import usePostNote from '@hooks/api/notesAPI/usePostNote';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
+
+import Popup from '@components/Popup';
+import { showToast } from '@components/Toast';
 import DraftNotification from './components/DraftNotification';
 import DraftSavedToast from './components/DraftSavedToast';
 import Header from './components/Header';
+import InfoSection from './components/InfoSection';
 import LinkDisplay from './components/LinkDisplay';
 import TextEditor from './components/TextEditor';
-
-const MOCK_TODO = {
-  noteId: 0,
-  done: true,
-  linkUrl: 'string',
-  fileUrl: 'string',
-  title: '투두입니당',
-  id: 0,
-  goal: {
-    id: 0,
-    title: '목표입니다',
-  },
-  userId: 0,
-  teamId: 'string',
-  updatedAt: '2024-08-01T05:23:51.630Z',
-  createdAt: '2024-08-01T05:23:51.630Z',
-};
+import TitleInput from './components/TitleInput';
 
 const TITLE_MAX_LENGTH = 30;
 const AUTO_SAVE_INTERVAL = 1000 * 60 * 5;
 
 function NewNotePage() {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [link, setLink] = useState('');
+  const location = useLocation();
+  const { todo, note: prevNote } = location.state;
+  const [title, setTitle] = useState(prevNote?.title || '');
+  const [content, setContent] = useState(prevNote?.content || '');
+  const [linkUrl, setLinkUrl] = useState(prevNote?.linkUrl || '');
   const [titleCount, setTitleCount] = useState(0);
   const [contentWithSpaces, setContentWithSpaces] = useState(0);
   const [contentWithoutSpaces, setContentWithoutSpaces] = useState(0);
@@ -43,10 +34,14 @@ function NewNotePage() {
   const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [isLinkEmbedOpen, setIsLinkEmbedOpen] = useState(false);
 
+  const { mutate: createNoteMutate } = usePostNote();
+  const { mutate: editNoteMutate } = usePatchNote();
+  const navigate = useNavigate();
+
   const noteRef = useRef({
     title: '',
     content: '',
-    link: '',
+    linkUrl: '',
     contentWithSpaces: 0,
     contentWithoutSpaces: 0,
   });
@@ -55,15 +50,23 @@ function NewNotePage() {
     noteRef.current = {
       title,
       content,
-      link,
+      linkUrl,
       contentWithSpaces,
       contentWithoutSpaces,
     };
     setIsSubmitEnabled(title.trim().length > 0 && content.trim().length > 0);
-  }, [title, content, link]);
+  }, [title, content, linkUrl]);
+
+  useEffect(() => {
+    if (prevNote) {
+      setTitleCount(prevNote.title.length);
+      setContentWithSpaces(prevNote.content.length);
+      setContentWithoutSpaces(prevNote.content.replace(/\s/g, '').length);
+    }
+  }, [prevNote]);
 
   const handleChangeLink = (newLink: string) => {
-    setLink(newLink);
+    setLinkUrl(newLink);
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -81,15 +84,13 @@ function NewNotePage() {
   };
 
   const handleSaveDraft = () => {
-    const note = { todo: MOCK_TODO, ...noteRef.current };
+    const note = { todoId: todo.id, ...noteRef.current };
 
     const prevDrafts = JSON.parse(localStorage.getItem('draft-notes') || '[]');
 
     const newDrafts = [
       note,
-      ...prevDrafts.filter(
-        (draft: NoteDraft) => draft.todo.id !== MOCK_TODO.id,
-      ),
+      ...prevDrafts.filter((draft: NoteDraft) => draft.todoId !== todo.id),
     ];
     localStorage.setItem('draft-notes', JSON.stringify(newDrafts));
 
@@ -99,17 +100,25 @@ function NewNotePage() {
   const handleGetDraft = () => {
     const drafts = JSON.parse(localStorage.getItem('draft-notes') || '[]');
     const currentDraft = drafts.find(
-      (draft: NoteDraft) => draft.todo.id === MOCK_TODO.id,
+      (draft: NoteDraft) => draft.todoId === todo.id,
     );
 
     if (currentDraft) {
       setTitle(currentDraft.title);
       setContent(currentDraft.content);
-      setLink(currentDraft.link);
+      setLinkUrl(currentDraft.linkUrl);
       setTitleCount(currentDraft.title.length);
       setContentWithSpaces(currentDraft.contentWithSpaces);
       setContentWithoutSpaces(currentDraft.contentWithoutSpaces);
     }
+  };
+
+  const handleDeleteDraft = (deleteId: number) => {
+    const drafts = JSON.parse(localStorage.getItem('draft-notes') || '[]');
+    const newDrafts = drafts.filter(
+      (draft: NoteDraft) => draft.todoId !== deleteId,
+    );
+    localStorage.setItem('draft-notes', JSON.stringify(newDrafts));
   };
 
   const handleCloseDraftNotification = () => {
@@ -120,13 +129,53 @@ function NewNotePage() {
     setIsDraftModalOpen(value);
   };
 
+  const handleClickSaveButton = () => {
+    createNoteMutate(
+      {
+        todoId: todo.id,
+        note: {
+          title,
+          content,
+          linkUrl: linkUrl || undefined,
+        },
+      },
+      {
+        onSuccess: () => {
+          handleDeleteDraft(todo.id);
+          showToast('노트 작성이 완료되었습니다');
+          navigate(-1);
+        },
+      },
+    );
+  };
+
+  const handleClickEditButton = () => {
+    editNoteMutate(
+      {
+        noteId: todo.noteId,
+        note: {
+          title,
+          content,
+          linkUrl: linkUrl || undefined,
+        },
+      },
+      {
+        onSuccess: () => {
+          handleDeleteDraft(todo.id);
+          showToast('노트 수정이 완료되었습니다');
+          navigate(-1);
+        },
+      },
+    );
+  };
+
   useEffect(() => {
     const drafts = localStorage.getItem('draft-notes');
 
     // 임시 저장 불러올 때 제목을 보여주기 위함
     if (drafts) {
       const currentDraft = JSON.parse(drafts).find(
-        (draft: NoteDraft) => draft.todo.id === MOCK_TODO.id,
+        (draft: NoteDraft) => draft.todoId === todo.id,
       );
       if (currentDraft) {
         setIsDraftExist(true);
@@ -145,12 +194,16 @@ function NewNotePage() {
   return (
     <>
       <div className="flex h-screen items-center justify-center desktop:block">
-        {isLinkEmbedOpen && <iframe src={link} title="link embed" />}
+        {isLinkEmbedOpen && <iframe src={linkUrl} title="link embed" />}
         <div className="mx-4 h-screen w-full max-w-[792px] desktop:ml-[360px]">
           <div className="flex h-screen flex-col bg-white">
             <Header
+              isEditing={prevNote}
               isSubmitEnabled={isSubmitEnabled}
-              onDraftSave={handleSaveDraft}
+              onClickDraftButton={handleSaveDraft}
+              onClickSaveButton={
+                prevNote ? handleClickEditButton : handleClickSaveButton
+              }
             />
             {isDraftExist && (
               <DraftNotification
@@ -158,55 +211,26 @@ function NewNotePage() {
                 onOpenDraftModal={handleOpenDraftModal}
               />
             )}
-
-            <div className="mb-3 flex gap-[6px]">
-              <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800">
-                <FlagIcon className="h-[14.4px] w-[14.4px] fill-white" />
-              </div>
-              <h3 className="font-medium leading-6 text-slate-800">
-                {MOCK_TODO.goal.title}
-              </h3>
-            </div>
-            <div className="flex items-center gap-2 border-b border-b-slate-200 pb-6">
-              <div className="flex rounded-[4px] bg-slate-100 px-[3px] py-[2px]">
-                <span className="text-xs font-medium leading-4 text-slate-700">
-                  {MOCK_TODO.done ? 'Done' : 'To do'}
-                </span>
-              </div>
-              <p className="text-sm leading-5 text-slate-700">
-                {MOCK_TODO.title}
-              </p>
-            </div>
-            <div className="flex w-full items-center justify-between border-b border-b-slate-200 px-1 py-[2px]">
-              <input
-                placeholder="노트의 제목을 입력해주세요"
-                className="w-full py-3 text-lg font-medium leading-7 text-slate-800 outline-none"
-                value={title}
-                onChange={handleChangeInput}
-                maxLength={TITLE_MAX_LENGTH}
-              />
-              <div className="text-xs font-medium text-slate-800">
-                <span
-                  className={`${
-                    titleCount === TITLE_MAX_LENGTH
-                      ? 'text-red-500'
-                      : 'text-blue-500'
-                  }`}
-                >
-                  {titleCount}
-                </span>
-                /{TITLE_MAX_LENGTH}
-              </div>
-            </div>
+            <InfoSection
+              title={todo.title}
+              goalTitle={todo.goal?.title}
+              done={todo.done}
+            />
+            <TitleInput
+              title={title}
+              onChange={handleChangeInput}
+              titleCount={titleCount}
+              maxLength={TITLE_MAX_LENGTH}
+            />
             <div className="mb-2 mt-3 text-xs font-medium text-slate-800">
               공백 포함 : 총 {contentWithSpaces}자 | 공백 제외: 총{' '}
               {contentWithoutSpaces}자
             </div>
-            {link && (
+            {linkUrl && (
               <LinkDisplay
-                link={link}
+                link={linkUrl}
                 onDelete={() => {
-                  setLink('');
+                  setLinkUrl('');
                   setIsLinkEmbedOpen(false);
                 }}
                 onClickEmbed={() => setIsLinkEmbedOpen((prev) => !prev)}

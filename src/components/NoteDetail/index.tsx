@@ -1,10 +1,14 @@
+/* eslint-disable react/no-danger */
+
 import { CircleDeleteIcon, DeleteIcon, FlagIcon } from '@assets';
 import Kebab from '@components/Kebab';
+import { showToast } from '@components/Toast';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import useGetNote from '@hooks/api/notesAPI/useGetNote';
 import formatDate from '@utils/formatDate';
-
+import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface NoteDetailProps {
   onClose: () => void;
@@ -13,9 +17,10 @@ interface NoteDetailProps {
 
 function NoteDetail({ onClose, noteId }: NoteDetailProps) {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   const { data: noteData } = useGetNote(noteId);
-  const { mutate: deleteNote } = useDeleteNote();
+  const { mutate: deleteNoteMutate } = useDeleteNote();
 
   useEffect(() => {
     if (noteData) {
@@ -30,24 +35,46 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
   };
 
   const handleEditNote = () => {
-    // 노트 수정 페이지로 이동
+    const todo = {
+      noteId,
+      done: noteData?.data.todo.done || false,
+      title: noteData?.data.todo?.title,
+      goal: {
+        id: noteData?.data.goal?.id || null,
+        title: noteData?.data.goal?.title || null,
+      },
+      id: noteData?.data.todo.id,
+    };
+
+    const note = {
+      title: noteData?.data.title,
+      content: noteData?.data.content,
+      linkUrl: noteData?.data.linkUrl,
+    };
+
+    navigate('/notes/new', { state: { todo, note } });
   };
 
   const handleDeleteNote = () => {
-    deleteNote(noteId);
+    deleteNoteMutate(noteId, {
+      onSuccess: () => {
+        showToast('노트가 삭제되었습니다');
+        handleClose();
+      },
+    });
   };
 
   return (
     <>
       {isOpen && (
         <div
-          className="fixed left-0 top-0 z-20 h-dvh w-dvw opacity-50 tablet:bg-black"
+          className="fixed left-0 top-0 z-50 h-dvh w-dvw opacity-50 tablet:bg-black"
           onClick={handleClose}
         />
       )}
       {noteData && (
         <div
-          className={`fixed right-0 top-0 z-30 h-screen bg-white p-6 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} tablet:w-[512px] desktop:w-[800px]`}
+          className={`fixed right-0 top-0 z-[60] flex h-screen flex-col bg-white p-6 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} tablet:w-[512px] desktop:w-[800px]`}
         >
           <DeleteIcon className="mb-4 cursor-pointer" onClick={handleClose} />
           <div className="flex flex-col gap-3 border-b-[1px] border-slate-200 pb-6">
@@ -57,7 +84,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
                   <FlagIcon className="h-[14.4px] w-[14.4px] fill-white" />
                 </div>
                 <h3 className="font-medium leading-6 text-slate-800">
-                  {noteData.data.goal.title}
+                  {noteData.data.goal?.title || '목표 없음'}
                 </h3>
               </div>
               <Kebab
@@ -78,7 +105,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
                 </p>
               </div>
               <p className="text-xs leading-4 text-slate-500">
-                {formatDate(noteData.data.createdAt)} 작성
+                {formatDate(noteData.data.createdAt)}
                 {noteData.data.createdAt !== noteData.data.updatedAt
                   ? ` | ${formatDate(noteData.data.updatedAt)} 수정`
                   : ''}
@@ -91,7 +118,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
             </h2>
           </div>
           <div
-            className={`leading-6 text-slate-700 ${noteData.data.linkUrl ? 'pt-3' : 'pt-4'}`}
+            className={`flex-1 overflow-y-scroll leading-6 text-slate-700 ${noteData.data.linkUrl ? 'pt-3' : 'pt-4'}`}
           >
             {noteData.data.linkUrl ? (
               <div className="mb-4 flex justify-between rounded-[20px] bg-slate-200 py-1 pl-4 pr-[6px]">
@@ -101,7 +128,12 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
             ) : (
               <div className="pt-1" />
             )}
-            {noteData.data.content}
+            <div
+              className="tiptap max-h-full"
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(noteData.data.content),
+              }}
+            />
           </div>
         </div>
       )}

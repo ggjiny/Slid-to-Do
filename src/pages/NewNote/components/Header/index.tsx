@@ -1,11 +1,18 @@
 import Button from '@components/Button';
 
 interface HeaderProps {
+  isEditing: boolean;
   isSubmitEnabled: boolean;
-  onDraftSave: () => void;
+  onClickDraftButton: () => void;
+  onClickSaveButton: () => void;
 }
 
-function Header({ isSubmitEnabled, onDraftSave }: HeaderProps) {
+function Header({
+  isEditing,
+  isSubmitEnabled,
+  onClickDraftButton,
+  onClickSaveButton,
+}: HeaderProps) {
   return (
     <div className="mb-4 mt-[17px] flex items-center justify-between tablet:mt-6">
       <h1 className="text-lg font-semibold leading-7 text-slate-900">
@@ -16,7 +23,7 @@ function Header({ isSubmitEnabled, onDraftSave }: HeaderProps) {
           shape="outlined"
           size="xs"
           additionalClass="border-none tablet:w-[96px] tablet:h-[44px]"
-          onClick={onDraftSave}
+          onClick={onClickDraftButton}
         >
           임시 저장
         </Button>
@@ -25,8 +32,9 @@ function Header({ isSubmitEnabled, onDraftSave }: HeaderProps) {
           size="xs"
           additionalClass="border-none tablet:w-[96px] tablet:h-[44px]"
           disabled={!isSubmitEnabled}
+          onClick={onClickSaveButton}
         >
-          작성 완료
+          {isEditing ? '수정 완료' : '작성 완료'}
         </Button>
       </div>
     </div>

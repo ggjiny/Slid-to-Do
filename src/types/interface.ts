@@ -41,9 +41,14 @@ export interface Note {
   goal: NoteGoal;
 }
 
-export interface NoteDraft {
-  todo: Todo;
+export interface CreateNote {
   title: string;
   content: string;
-  link: string;
+  linkUrl?: string;
 }
+
+export interface NoteDraft extends CreateNote {
+  todoId: number;
+}
+
+export type UpdateNote = Partial<CreateNote>;
