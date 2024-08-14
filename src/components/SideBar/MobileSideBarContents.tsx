@@ -8,7 +8,7 @@ import {
 import Button from '@components/Button';
 import usePostGoal from '@hooks/api/goalsAPI/usePostGoal';
 import useOutsideClick from '@hooks/useOutsideClick';
-import { MouseEvent, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface MobileSideBarContentsProps {
@@ -31,9 +31,8 @@ function MobileSideBarContents({
 
   useOutsideClick(inputRef, () => setIsEditing(false));
 
-  const handleAddGoalBtn = (e: MouseEvent) => {
-    e.stopPropagation();
-    setIsEditing(true);
+  const handleAddGoalBtn = () => {
+    setTimeout(() => setIsEditing(true), 0);
   };
 
   useEffect(() => {
@@ -112,7 +111,7 @@ function MobileSideBarContents({
         <Button
           shape="outlined"
           size="xs"
-          onClick={(e) => handleAddGoalBtn(e)}
+          onClick={handleAddGoalBtn}
           disabled={isEditing}
         >
           <PlusIcon
@@ -130,11 +129,9 @@ function MobileSideBarContents({
               navigate('/goal-detail');
               toggleSideBar();
             }}
+            key={item.id}
           >
-            <li
-              key={item.id}
-              className="cursor-pointer p-2 text-sm font-medium text-slate-700"
-            >
+            <li className="cursor-pointer p-2 text-sm font-medium text-slate-700">
               • {item.title}
             </li>
           </div>
