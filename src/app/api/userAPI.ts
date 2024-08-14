@@ -1,3 +1,4 @@
+import authInstance from './authInstance';
 import axiosInstance from './axiosInstance';
 
 interface RegisterData {
@@ -7,7 +8,7 @@ interface RegisterData {
 }
 
 const register = async (registerData: RegisterData) => {
-  const response = await axiosInstance({
+  const response = await authInstance({
     url: '/user',
     method: 'post',
     data: registerData,
