@@ -4,6 +4,7 @@ import Kebab from '@components/Kebab';
 import NoteDetail from '@components/NoteDetail';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 interface NoteItemProps {
   noteData: Note;
@@ -11,7 +12,9 @@ interface NoteItemProps {
 
 function NoteItem({ noteData }: NoteItemProps) {
   const [isDetailOpen, setIsDetailOpen] = useState(false);
-  const { mutate: deleteNote } = useDeleteNote();
+  const { mutate: deleteNoteMutate } = useDeleteNote();
+  const navigate = useNavigate();
+
   const handleClickNote = () => {
     setIsDetailOpen(true);
   };
@@ -21,11 +24,22 @@ function NoteItem({ noteData }: NoteItemProps) {
   };
 
   const handleEditNote = () => {
-    // 노트 아이디를 통해 수정
+    const todo = {
+      noteId: noteData.id,
+      done: noteData.todo.done,
+      title: noteData.todo.title,
+      goal: {
+        id: noteData.goal.id || null,
+        title: noteData.goal.title || null,
+      },
+      id: noteData.todo.id,
+    };
+
+    navigate('/notes/new', { state: { todo, isEditing: true } });
   };
 
   const handleDeleteNote = () => {
-    deleteNote(noteData.id);
+    deleteNoteMutate(noteData.id);
   };
 
   return (

@@ -1,11 +1,12 @@
-import { NoteDraft } from '@/types/interface';
-import usePatchNote from '@hooks/api/notesAPI/usePatchNote';
-import usePostNote from '@hooks/api/notesAPI/usePostNote';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
+import { NoteDraft } from '@/types/interface';
+import useGetNote from '@hooks/api/notesAPI/useGetNote';
+import usePatchNote from '@hooks/api/notesAPI/usePatchNote';
+import usePostNote from '@hooks/api/notesAPI/usePostNote';
+
 import Popup from '@components/Popup';
-import { showToast } from '@components/Toast';
 import DraftNotification from './components/DraftNotification';
 import DraftSavedToast from './components/DraftSavedToast';
 import Header from './components/Header';
@@ -19,19 +20,37 @@ const AUTO_SAVE_INTERVAL = 1000 * 60 * 5;
 
 function NewNotePage() {
   const location = useLocation();
-  const { todo, note: prevNote } = location.state;
-  const [title, setTitle] = useState(prevNote?.title || '');
-  const [content, setContent] = useState(prevNote?.content || '');
-  const [linkUrl, setLinkUrl] = useState(prevNote?.linkUrl || '');
+  const { todo, isEditing } = location.state;
+
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+  const [linkUrl, setLinkUrl] = useState('');
   const [titleCount, setTitleCount] = useState(0);
   const [contentWithSpaces, setContentWithSpaces] = useState(0);
   const [contentWithoutSpaces, setContentWithoutSpaces] = useState(0);
+  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+
+  const { data: noteData } = useGetNote(todo.noteId, isEditing);
+
+  useEffect(() => {
+    if (isEditing && noteData) {
+      const prevTitle = noteData?.data.title;
+      const prevContent = noteData?.data.content;
+      const prevLinkUrl = noteData?.data.linkUrl;
+
+      setTitle(prevTitle);
+      setContent(prevContent);
+      setLinkUrl(prevLinkUrl);
+      setTitleCount(prevTitle.length);
+      setContentWithSpaces(prevContent.length);
+      setContentWithoutSpaces(prevContent.replace(/\s/g, '').length);
+    }
+  }, [isEditing, noteData]);
 
   const [isDraftExist, setIsDraftExist] = useState(false);
   const [isDraftModalOpen, setIsDraftModalOpen] = useState(false);
   const [draftTitle, setDraftTitle] = useState('');
   const [isDraftSaved, setIsDraftSaved] = useState(false);
-  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
   const [isLinkEmbedOpen, setIsLinkEmbedOpen] = useState(false);
 
   const { mutate: createNoteMutate } = usePostNote();
@@ -57,23 +76,15 @@ function NewNotePage() {
     setIsSubmitEnabled(title.trim().length > 0 && content.trim().length > 0);
   }, [title, content, linkUrl]);
 
-  useEffect(() => {
-    if (prevNote) {
-      setTitleCount(prevNote.title.length);
-      setContentWithSpaces(prevNote.content.length);
-      setContentWithoutSpaces(prevNote.content.replace(/\s/g, '').length);
-    }
-  }, [prevNote]);
-
   const handleChangeLink = (newLink: string) => {
     setLinkUrl(newLink);
   };
 
-  const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    if (value.length <= TITLE_MAX_LENGTH) {
-      setTitle(value);
-      setTitleCount(value.length);
+  const handleChangeTitle = (e: ChangeEvent<HTMLInputElement>) => {
+    const { value: newTitle } = e.target;
+    if (newTitle.length <= TITLE_MAX_LENGTH) {
+      setTitle(newTitle);
+      setTitleCount(newTitle.length);
     }
   };
 
@@ -142,7 +153,6 @@ function NewNotePage() {
       {
         onSuccess: () => {
           handleDeleteDraft(todo.id);
-          showToast('노트 작성이 완료되었습니다');
           navigate(-1);
         },
       },
@@ -162,7 +172,6 @@ function NewNotePage() {
       {
         onSuccess: () => {
           handleDeleteDraft(todo.id);
-          showToast('노트 수정이 완료되었습니다');
           navigate(-1);
         },
       },
@@ -198,11 +207,11 @@ function NewNotePage() {
         <div className="mx-4 h-screen w-full max-w-[792px] desktop:ml-[360px]">
           <div className="flex h-screen flex-col bg-white">
             <Header
-              isEditing={prevNote}
+              isEditing={isEditing}
               isSubmitEnabled={isSubmitEnabled}
               onClickDraftButton={handleSaveDraft}
               onClickSaveButton={
-                prevNote ? handleClickEditButton : handleClickSaveButton
+                isEditing ? handleClickEditButton : handleClickSaveButton
               }
             />
             {isDraftExist && (
@@ -218,7 +227,7 @@ function NewNotePage() {
             />
             <TitleInput
               title={title}
-              onChange={handleChangeInput}
+              onChange={handleChangeTitle}
               titleCount={titleCount}
               maxLength={TITLE_MAX_LENGTH}
             />

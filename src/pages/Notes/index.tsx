@@ -1,7 +1,12 @@
 import { FlagIcon } from '@assets';
+import useGetGoal from '@hooks/api/goalsAPI/useGetGoal';
+import { useParams } from 'react-router-dom';
 import NoteList from './components/NoteList';
 
 function NotesPage() {
+  const { goalId } = useParams();
+  const { data: goalData } = useGetGoal(Number(goalId));
+
   return (
     <div className="flex items-center justify-center desktop:block">
       <div className="mx-4 w-full max-w-[792px] desktop:ml-[360px]">
@@ -13,10 +18,10 @@ function NotesPage() {
             <FlagIcon className="h-[14.4px] w-[14.4px] fill-white" />
           </div>
           <h2 className="text-sm font-semibold leading-5 text-slate-800">
-            자바스크립트로 웹 서비스 만들기
+            {goalData?.data.title}
           </h2>
         </div>
-        <NoteList />
+        <NoteList goalId={Number(goalId)} />
       </div>
     </div>
   );
