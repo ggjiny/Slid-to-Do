@@ -1,13 +1,10 @@
 import { LinkIcon } from '@assets';
-import LinkModal from '@components/LinkModal';
-import { useState } from 'react';
 
 interface LinkButtonProps {
-  onChangeLink: (link: string) => void;
+  setIsLinkModalOpen: (isOpen: boolean) => void;
 }
 
-function LinkButton({ onChangeLink }: LinkButtonProps) {
-  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
+function LinkButton({ setIsLinkModalOpen }: LinkButtonProps) {
   const handleClickLinkIcon = () => {
     setIsLinkModalOpen(true);
   };
@@ -18,16 +15,6 @@ function LinkButton({ onChangeLink }: LinkButtonProps) {
         className="cursor-pointer fill-slate-200 stroke-slate-700"
         onClick={handleClickLinkIcon}
       />
-      {isLinkModalOpen && (
-        <LinkModal
-          onConfirm={(link: string) => {
-            onChangeLink(link);
-            setIsLinkModalOpen(false);
-          }}
-          onCancel={() => setIsLinkModalOpen(false)}
-          fullscreen
-        />
-      )}
     </>
   );
 }

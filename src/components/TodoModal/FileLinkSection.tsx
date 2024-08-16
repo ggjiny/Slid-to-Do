@@ -23,7 +23,10 @@ function FileLinkSection({
   setIsLinkModalVisible,
 }: FileLinkSectionProps) {
   return (
-    <div className="flex flex-col items-start justify-start gap-3 self-stretch">
+    <div
+      className="flex flex-col items-start justify-start gap-3 self-stretch"
+      onClick={(e) => e.stopPropagation()}
+    >
       <div className="text-base font-semibold leading-normal text-slate-800">
         파일 및 링크
       </div>

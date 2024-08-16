@@ -1,3 +1,4 @@
+import LinkModal from '@components/LinkModal';
 import Color from '@tiptap/extension-color';
 import Highlight from '@tiptap/extension-highlight';
 import Placeholder from '@tiptap/extension-placeholder';
@@ -9,7 +10,7 @@ import Typography from '@tiptap/extension-typography';
 import Underline from '@tiptap/extension-underline';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import Toolbar from './Toolbar';
 import './index.css';
 
@@ -24,6 +25,7 @@ function TextEditor({
   onChangeContent,
   onChangeLink,
 }: TextEditorProps) {
+  const [isLinkModalOpen, setIsLinkModalOpen] = useState(false);
   const editor = useEditor({
     content: prevContent,
     extensions: [
@@ -66,12 +68,25 @@ function TextEditor({
 
   return (
     <div className="mb-8 flex-grow">
-      {editor && <Toolbar editor={editor} onChangeLink={onChangeLink} />}
+      {editor && (
+        <Toolbar editor={editor} setIsLinkModalOpen={setIsLinkModalOpen} />
+      )}
 
       <EditorContent
         editor={editor}
         className="overflow-auto bg-white text-slate-700"
       />
+
+      {isLinkModalOpen && (
+        <LinkModal
+          onConfirm={(link: string) => {
+            onChangeLink(link);
+            setIsLinkModalOpen(false);
+          }}
+          onCancel={() => setIsLinkModalOpen(false)}
+          fullscreen
+        />
+      )}
     </div>
   );
 }

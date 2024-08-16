@@ -2,39 +2,15 @@ import { PlusBlueIcon } from '@assets';
 import TodoItem from '@components/TodoItem';
 import TodoCreateModal from '@components/TodoModal/TodoCreateModal';
 import useGetTodos from '@hooks/api/todosAPI/useGetTodos';
-import useWindowHeight from '@hooks/useWindowHeight';
-import useWindowWidth from '@hooks/useWindowWidth';
-import cn from '@utils/cn';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import FilterButtons from './components/FilterButtons';
+import useLayoutStyles from './useLayoutStyles';
 
 function TodosPage() {
-  const windowHeight = useWindowHeight();
-  const windowWidth = useWindowWidth();
-
-  const mobileHeight = windowHeight - 88;
-  const defaultHeight = windowHeight - 196;
-  const tabletHeight = windowHeight - 184;
-
-  const containerClass = cn('w-full overflow-auto rounded-xl', {
-    'tablet:h-dvh': windowWidth >= 744,
-  });
-
-  const style =
-    windowWidth >= 744
-      ? { height: `${tabletHeight}px` }
-      : { height: `${defaultHeight}px` };
-
-  const entireContainerClass = cn(
-    'flex w-full flex-col gap-4 p-4 tablet:p-6 desktop:w-[1152px] desktop:py-6 desktop:pl-[360px]',
-    {
-      'tablet:h-dvh': windowWidth >= 744,
-    },
-  );
-  const entireContainerStyle =
-    windowWidth >= 744 ? {} : { height: `${mobileHeight}px` };
+  const { containerClass, style, entireContainerClass, entireContainerStyle } =
+    useLayoutStyles();
 
   const totalCount = useGetTodos({ size: 1 }).data?.pages[0].data.totalCount;
 
@@ -135,7 +111,7 @@ function TodosPage() {
                   다음 할 일을 불러오는 중입니다...
                 </div>
               )}
-              <div ref={ref} className="h-1" />
+              <div ref={ref} />
             </div>
           )}
         </div>

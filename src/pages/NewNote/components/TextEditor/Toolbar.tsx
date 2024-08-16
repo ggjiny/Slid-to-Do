@@ -14,10 +14,10 @@ import LinkButton from './LinkButton';
 
 interface ToolbarProps {
   editor: Editor;
-  onChangeLink: (link: string) => void;
+  setIsLinkModalOpen: (isOpen: boolean) => void;
 }
 
-function Toolbar({ editor, onChangeLink }: ToolbarProps) {
+function Toolbar({ editor, setIsLinkModalOpen }: ToolbarProps) {
   const ACTIVE_FILL_COLOR = 'fill-blue-600';
   const DEFAULT_FILL_COLOR = 'fill-slate-700';
 
@@ -64,7 +64,7 @@ function Toolbar({ editor, onChangeLink }: ToolbarProps) {
           <FontColorButton editor={editor} defaultColor={DEFAULT_FILL_COLOR} />
         </div>
       </div>
-      <LinkButton onChangeLink={onChangeLink} />
+      <LinkButton setIsLinkModalOpen={setIsLinkModalOpen} />
     </div>
   );
 }

@@ -1,16 +1,18 @@
 import BaseInput from '@components/Input/BaseInput';
-import { ChangeEvent } from 'react';
+import { ChangeEvent, RefObject } from 'react';
 
 interface TitleSectionProps {
   title: string;
   onTitleChange: (e: ChangeEvent<HTMLInputElement>) => void;
   isTitleValid: boolean;
+  inputRef?: RefObject<HTMLInputElement>;
 }
 
 function TitleSection({
   title,
   onTitleChange,
   isTitleValid,
+  inputRef,
 }: TitleSectionProps) {
   return (
     <div className="flex flex-col items-start justify-start self-stretch">
@@ -26,6 +28,7 @@ function TitleSection({
           onChange={onTitleChange}
           placeholder="제목을 입력해주세요."
           isInvalid={!isTitleValid}
+          ref={inputRef}
         />
         {!isTitleValid && (
           <div className="mt-1.5 items-start justify-start pl-2 text-sm font-normal leading-tight text-red-500">
