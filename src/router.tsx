@@ -27,7 +27,7 @@ const router = createBrowserRouter([
         element: <DashboardPage />,
       },
       {
-        path: routes.goalDetail,
+        path: `${routes.goalDetail}/:id`,
         element: <GoalDetailPage />,
       },
       {

@@ -6,6 +6,7 @@ import {
   TextLogoIcon,
 } from '@assets';
 import Button from '@components/Button';
+import routes from '@constants/routes';
 import usePostGoal from '@hooks/api/goalsAPI/usePostGoal';
 import useOutsideClick from '@hooks/useOutsideClick';
 import { useEffect, useRef, useState } from 'react';
@@ -48,7 +49,7 @@ function MobileSideBarContents({
       <TextLogoIcon
         className="cursor-pointer"
         onClick={() => {
-          navigate('/dashboard');
+          navigate(`${routes.dashboard}`);
           toggleSideBar();
         }}
       />
@@ -70,7 +71,7 @@ function MobileSideBarContents({
             onClick={() => {
               localStorage.removeItem('accessToken');
               localStorage.removeItem('refreshToken');
-              navigate('/sign-in');
+              navigate(`${routes.signIn}`);
             }}
           >
             <span className="text-xs font-normal leading-4 text-slate-400">
@@ -86,7 +87,7 @@ function MobileSideBarContents({
         <div
           className="flex cursor-pointer flex-row"
           onClick={() => {
-            navigate('/dashboard');
+            navigate(`${routes.dashboard}`);
             toggleSideBar();
           }}
         >
@@ -126,7 +127,7 @@ function MobileSideBarContents({
         {goalData.map((item) => (
           <div
             onClick={() => {
-              navigate('/goal-detail');
+              navigate(`${routes.goalDetail}/${item.id}`);
               toggleSideBar();
             }}
             key={item.id}

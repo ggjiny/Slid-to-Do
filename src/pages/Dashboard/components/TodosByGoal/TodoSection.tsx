@@ -39,6 +39,7 @@ function TodoSection({
   isToggleOpen,
   totalCount,
 }: TodoSectionProps) {
+  const todosData = todos?.pages || [];
   let content;
 
   if (!isFetching) {
@@ -51,7 +52,7 @@ function TodoSection({
     } else if (!isToggleOpen) {
       content = (
         <div>
-          {todos.pages[0].data.todos.slice(0, 4).map((todo: Todo) => (
+          {todosData[0].data.todos.slice(0, 4).map((todo: Todo) => (
             <TodoItem key={todo.id} todo={todo} showIcons />
           ))}
         </div>
@@ -59,7 +60,7 @@ function TodoSection({
     } else {
       content = (
         <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
-          {todos.pages.map((pageData: Page) =>
+          {todosData.map((pageData: Page) =>
             pageData.data.todos.map((todo: Todo) => (
               <TodoItem key={todo.id} todo={todo} showIcons />
             )),

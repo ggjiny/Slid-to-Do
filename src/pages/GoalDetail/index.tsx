@@ -1,13 +1,34 @@
-import { Todo } from '@/types/interface';
 import { ArrowRightIcon, NoteIcon } from '@assets';
-import { Link } from 'react-router-dom';
+import useGetTodos from '@hooks/api/todosAPI/useGetTodos';
+import { Link, useParams } from 'react-router-dom';
 import GoalBox from './components/GoalBox';
 import TodoBox from './components/TodoBox';
-import mockTodosData from './mockData';
 
 function GoalDetailPage() {
-  const todos = mockTodosData.filter((todo: Todo) => !todo.done);
-  const dones = mockTodosData.filter((todo: Todo) => todo.done);
+  const params = useParams();
+  const goalId = Number(params.id) || 0;
+
+  const {
+    data: todosInfo,
+    isFetching: todoIsFetching,
+    fetchNextPage: fetchNextTodosPage,
+    hasNextPage: hasTodosNextPage,
+  } = useGetTodos({
+    goalId,
+    done: false,
+  });
+  const {
+    data: donesInfo,
+    isFetching: doneIsFetching,
+    fetchNextPage: fetchNextDonesPage,
+    hasNextPage: hasDonesNextPage,
+  } = useGetTodos({
+    goalId,
+    done: true,
+  });
+
+  const todosTotalCount: number = todosInfo?.pages[0]?.data.totalCount ?? 0;
+  const donesTotalCount: number = donesInfo?.pages[0]?.data.totalCount ?? 0;
 
   return (
     <div className="flex min-h-screen justify-center bg-slate-100 desktop:min-w-[1920px]">
@@ -16,9 +37,9 @@ function GoalDetailPage() {
           목표
         </h1>
         <div className="mt-4 flex flex-col gap-4 tablet:gap-6">
-          <GoalBox />
+          <GoalBox goalId={goalId} />
           <Link
-            to="/notes"
+            to={`/notes/${goalId}`}
             className="flex items-center justify-between rounded-xl border-[1px] border-slate-100 bg-blue-100 px-6 py-4"
           >
             <div className="flex items-center gap-2 text-lg font-bold">
@@ -31,12 +52,20 @@ function GoalDetailPage() {
             <TodoBox
               title="To do"
               placeholder="아직 해야할 일이 없어요"
-              todos={todos}
+              fetchNextPage={fetchNextTodosPage}
+              hasNextPage={hasTodosNextPage}
+              isFetching={todoIsFetching}
+              todos={todosInfo}
+              totalCount={todosTotalCount}
             />
             <TodoBox
               title="Done"
               placeholder="아직 다 한 일이 없어요"
-              todos={dones}
+              fetchNextPage={fetchNextDonesPage}
+              hasNextPage={hasDonesNextPage}
+              isFetching={doneIsFetching}
+              todos={donesInfo}
+              totalCount={donesTotalCount}
             />
           </div>
         </div>

@@ -6,6 +6,7 @@ import {
   TextLogoIcon,
 } from '@assets';
 import Button from '@components/Button';
+import routes from '@constants/routes';
 import usePostGoal from '@hooks/api/goalsAPI/usePostGoal';
 import useOutsideClick from '@hooks/useOutsideClick';
 import { useEffect, useRef, useState } from 'react';
@@ -49,7 +50,7 @@ function DesktopSideBarContents({
       <TextLogoIcon
         className="cursor-pointer"
         onClick={() => {
-          navigate('/dashboard');
+          navigate(`${routes.dashboard}`);
           if (width < 1920) toggleSideBar();
         }}
       />
@@ -67,7 +68,7 @@ function DesktopSideBarContents({
             onClick={() => {
               localStorage.removeItem('accessToken');
               localStorage.removeItem('refreshToken');
-              navigate('/sign-in');
+              navigate(`${routes.signIn}`);
             }}
           >
             <span className="text-xs font-normal leading-4 text-slate-400">
@@ -91,7 +92,7 @@ function DesktopSideBarContents({
       <div
         className="my-4 mt-10 flex h-8 cursor-pointer flex-row items-center"
         onClick={() => {
-          navigate('/dashboard');
+          navigate(`${routes.dashboard}`);
           if (width < 1920) toggleSideBar();
         }}
       >
@@ -107,7 +108,7 @@ function DesktopSideBarContents({
         {goalData.map((item) => (
           <div
             onClick={() => {
-              navigate('/goal-detail');
+              navigate(`${routes.goalDetail}/${item.id}`);
               if (width < 1920) toggleSideBar();
             }}
             key={item.id}

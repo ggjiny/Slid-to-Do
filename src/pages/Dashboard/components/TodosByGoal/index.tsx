@@ -2,12 +2,18 @@ import { Goal } from '@/types/interface';
 import { FlagIcon } from '@assets';
 import LoadingAnimation from '@components/LoadingAnimation';
 import useGetGoals from '@hooks/api/goalsAPI/useGetGoals';
+import InfiniteScroll from 'react-infinite-scroller';
 import TodosByGoalBox from './TodosByGoalBox';
 
 function TodosByGoal() {
-  const { data, isLoading } = useGetGoals(3);
-  const goalsData = data?.pages[0].data;
-
+  const {
+    data: goalsInfo,
+    isLoading,
+    fetchNextPage,
+    hasNextPage,
+  } = useGetGoals();
+  const goalsData = goalsInfo?.pages || [];
+  const totalCount = goalsData[0]?.data?.totalCount ?? 0;
   let content;
 
   if (isLoading) {
@@ -16,13 +22,17 @@ function TodosByGoal() {
         <LoadingAnimation />
       </div>
     );
-  } else if (goalsData && goalsData.totalCount > 0) {
+  } else if (totalCount > 0) {
     content = (
-      <div className="mt-4">
-        {goalsData.goals.map((goal: Goal) => (
-          <TodosByGoalBox key={goal.id} id={goal.id} title={goal.title} />
-        ))}
-      </div>
+      <InfiniteScroll loadMore={() => fetchNextPage} hasMore={hasNextPage}>
+        <div className="mt-4">
+          {goalsData.map((page) =>
+            page.data.goals.map((goal: Goal) => (
+              <TodosByGoalBox key={goal.id} id={goal.id} title={goal.title} />
+            )),
+          )}
+        </div>
+      </InfiniteScroll>
     );
   } else {
     content = (
