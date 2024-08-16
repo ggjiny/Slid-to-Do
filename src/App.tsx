@@ -52,7 +52,7 @@ function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="h-dvh w-dvw font-Pretendard text-base font-normal">
+      <div className="h-dvh w-dvw max-w-full font-Pretendard text-base font-normal">
         {pathname !== '/sign-in' && pathname !== '/sign-up' && <SideBar />}
         <div className="ml-0 tablet:ml-[60px] desktop:ml-0">
           <Outlet />

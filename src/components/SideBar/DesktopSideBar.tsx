@@ -1,6 +1,7 @@
 import { FoldIcon, LogoIcon } from '@assets';
 import TodoCreateModal from '@components/TodoModal/TodoCreateModal';
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import DesktopSideBarContents from './DesktopSideBarContents';
 
 interface SideBarProps {
@@ -26,6 +27,7 @@ function DesktopSideBar({
 }: SideBarProps) {
   const [showTodoModal, setShowTodoModal] = useState(false);
   const handleShowTodoModal = () => setShowTodoModal(true);
+  const navigate = useNavigate();
   return (
     <>
       {isOpen && width < 1920 && (
@@ -40,7 +42,16 @@ function DesktopSideBar({
         <div
           className={`fixed ${isOpen ? 'right-6' : 'right-[18px]'} top-5 h-5 w-6`}
         >
-          {!isOpen && <LogoIcon width={23} height={23} className="mb-4" />}
+          {!isOpen && (
+            <LogoIcon
+              width={23}
+              height={23}
+              className="mb-4 cursor-pointer"
+              onClick={() => {
+                navigate('/dashboard');
+              }}
+            />
+          )}
           <button
             type="button"
             aria-label="expend button"
