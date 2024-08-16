@@ -11,10 +11,14 @@ function TodosByGoal() {
     isLoading,
     fetchNextPage,
     hasNextPage,
-  } = useGetGoals();
+  } = useGetGoals(3);
   const goalsData = goalsInfo?.pages || [];
   const totalCount = goalsData[0]?.data?.totalCount ?? 0;
   let content;
+
+  const handleLoadMore = () => {
+    fetchNextPage();
+  };
 
   if (isLoading) {
     content = (
@@ -24,7 +28,7 @@ function TodosByGoal() {
     );
   } else if (totalCount > 0) {
     content = (
-      <InfiniteScroll loadMore={() => fetchNextPage} hasMore={hasNextPage}>
+      <InfiniteScroll loadMore={handleLoadMore} hasMore={hasNextPage}>
         <div className="mt-4">
           {goalsData.map((page) =>
             page.data.goals.map((goal: Goal) => (
