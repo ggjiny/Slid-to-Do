@@ -1,13 +1,13 @@
 /* eslint-disable react/no-danger */
 
-import { CircleDeleteIcon, DeleteIcon, FlagIcon } from '@assets';
+import { DeleteIcon, FlagIcon } from '@assets';
 import Kebab from '@components/Kebab';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import useGetNote from '@hooks/api/notesAPI/useGetNote';
 import formatDate from '@utils/formatDate';
 import DOMPurify from 'dompurify';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 interface NoteDetailProps {
   onClose: () => void;
@@ -27,6 +27,20 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
       setTimeout(() => setIsOpen(true), 10);
     }
   }, [noteData]);
+
+  useEffect(() => {
+    const bodyQuery = document.querySelector('body');
+
+    if (bodyQuery) {
+      bodyQuery.style.overflow = 'hidden';
+    }
+
+    return () => {
+      if (bodyQuery) {
+        bodyQuery.style.overflow = 'unset';
+      }
+    };
+  }, []);
 
   const handleClose = () => {
     setIsOpen(false);
@@ -62,7 +76,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
       )}
       {noteData && (
         <div
-          className={`fixed right-0 top-0 z-[60] flex h-screen flex-col bg-white p-6 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} tablet:w-[512px] desktop:w-[800px]`}
+          className={`fixed left-0 right-0 top-0 z-[60] flex h-screen flex-col bg-white p-6 shadow-lg transition-all duration-300 ease-in-out ${isOpen ? 'translate-x-0' : 'translate-x-full'} tablet:left-auto tablet:w-[512px] desktop:w-[800px]`}
         >
           <DeleteIcon className="mb-4 cursor-pointer" onClick={handleClose} />
           <div className="flex flex-col gap-3 border-b-[1px] border-slate-200 pb-6">
@@ -106,18 +120,22 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
             </h2>
           </div>
           <div
-            className={`flex-1 overflow-y-scroll leading-6 text-slate-700 ${noteData.data.linkUrl ? 'pt-3' : 'pt-4'}`}
+            className={`flex-1 overflow-y-auto leading-6 text-slate-700 ${noteData.data.linkUrl ? 'pt-3' : 'pt-4'}`}
           >
             {noteData.data.linkUrl ? (
-              <div className="mb-4 flex justify-between rounded-[20px] bg-slate-200 py-1 pl-4 pr-[6px]">
-                {noteData.data.linkUrl}
-                <CircleDeleteIcon className="cursor-pointer fill-slate-500" />
-              </div>
+              <Link
+                to={noteData.data.linkUrl}
+                className="group mb-4 flex justify-between rounded-[20px] bg-slate-200 py-1 pl-4 pr-[6px]"
+              >
+                <span className="text-slate-800 group-hover:text-blue-800">
+                  {noteData.data.linkUrl}
+                </span>
+              </Link>
             ) : (
               <div className="pt-1" />
             )}
             <div
-              className="tiptap max-h-full"
+              className="tiptap"
               dangerouslySetInnerHTML={{
                 __html: DOMPurify.sanitize(noteData.data.content),
               }}

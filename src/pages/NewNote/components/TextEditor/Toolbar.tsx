@@ -8,6 +8,7 @@ import {
   NumberListIcon,
   UnderlineIcon,
 } from '@assets';
+import useWindowWidth from '@hooks/useWindowWidth';
 import { Editor } from '@tiptap/react';
 import FontColorButton from './FontColorButton';
 import LinkButton from './LinkButton';
@@ -21,8 +22,12 @@ function Toolbar({ editor, setIsLinkModalOpen }: ToolbarProps) {
   const ACTIVE_FILL_COLOR = 'fill-blue-600';
   const DEFAULT_FILL_COLOR = 'fill-slate-700';
 
+  const windowWidth = useWindowWidth();
+
   return (
-    <div className="fixed bottom-6 z-10 flex w-full max-w-[792px] justify-between rounded-[21.5px] border border-slate-200 bg-white px-4 py-[10px] shadow-xs">
+    <div
+      className={`fixed bottom-6 left-4 right-4 z-10 flex max-w-[792px] justify-between rounded-[21.5px] border border-slate-200 bg-white px-4 py-[10px] shadow-xs tablet:left-auto tablet:right-auto tablet:w-full ${windowWidth > 744 && windowWidth <= 880 ? 'max-w-[660px]' : ''}`}
+    >
       <div className="flex gap-4">
         <div className="flex gap-1">
           <BoldIcon

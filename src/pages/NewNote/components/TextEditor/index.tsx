@@ -67,15 +67,12 @@ function TextEditor({
   }, [editor, onChangeContent]);
 
   return (
-    <div className="mb-8 flex-grow">
+    <div className="mb-20">
       {editor && (
         <Toolbar editor={editor} setIsLinkModalOpen={setIsLinkModalOpen} />
       )}
 
-      <EditorContent
-        editor={editor}
-        className="overflow-auto bg-white text-slate-700"
-      />
+      <EditorContent editor={editor} className="bg-white text-slate-700" />
 
       {isLinkModalOpen && (
         <LinkModal
