@@ -1,6 +1,7 @@
 import Button from '@components/Button';
 
 interface HeaderProps {
+  title: string;
   isEditing: boolean;
   isSubmitEnabled: boolean;
   onClickDraftButton: () => void;
@@ -8,6 +9,7 @@ interface HeaderProps {
 }
 
 function Header({
+  title,
   isEditing,
   isSubmitEnabled,
   onClickDraftButton,
@@ -17,6 +19,7 @@ function Header({
     <div className="mb-4 mt-[17px] flex items-center justify-between tablet:mt-6">
       <h1 className="text-lg font-semibold leading-7 text-slate-900">
         노트 작성
+        <span className="ml-4 text-blue-400">{title}</span>
       </h1>
       <div className="flex gap-2">
         <Button

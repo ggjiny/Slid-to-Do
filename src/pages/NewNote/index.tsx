@@ -12,6 +12,7 @@ import DraftSavedToast from './components/DraftSavedToast';
 import Header from './components/Header';
 import InfoSection from './components/InfoSection';
 import LinkDisplay from './components/LinkDisplay';
+import LinkEmbed from './components/LinkEmbed';
 import TextEditor from './components/TextEditor';
 import TitleInput from './components/TitleInput';
 
@@ -202,18 +203,25 @@ function NewNotePage() {
 
   return (
     <>
-      <div className="flex h-screen items-center justify-center desktop:block">
-        {isLinkEmbedOpen && <iframe src={linkUrl} title="link embed" />}
-        <div className="mx-4 h-screen w-full max-w-[792px] desktop:ml-[360px]">
-          <div className="flex h-screen flex-col bg-white">
-            <Header
-              isEditing={isEditing}
-              isSubmitEnabled={isSubmitEnabled}
-              onClickDraftButton={handleSaveDraft}
-              onClickSaveButton={
-                isEditing ? handleClickEditButton : handleClickSaveButton
-              }
-            />
+      <div
+        className={`flex flex-col items-center px-4 desktop:flex-row desktop:justify-normal ${isLinkEmbedOpen && 'h-screen desktop:h-auto'}`}
+      >
+        {isLinkEmbedOpen && (
+          <LinkEmbed link={linkUrl} onClose={() => setIsLinkEmbedOpen(false)} />
+        )}
+        <div
+          className={`flex w-full max-w-[792px] flex-col bg-white ${isLinkEmbedOpen ? 'flex-1 overflow-auto desktop:ml-8 desktop:h-screen' : 'h-screen desktop:ml-[360px]'} `}
+        >
+          <Header
+            title={title}
+            isEditing={isEditing}
+            isSubmitEnabled={isSubmitEnabled}
+            onClickDraftButton={handleSaveDraft}
+            onClickSaveButton={
+              isEditing ? handleClickEditButton : handleClickSaveButton
+            }
+          />
+          <div className="tablet:overflow-y-auto">
             {isDraftExist && (
               <DraftNotification
                 onCloseDraftNotification={handleCloseDraftNotification}
@@ -250,13 +258,13 @@ function NewNotePage() {
               onChangeContent={handleChangeContent}
               onChangeLink={handleChangeLink}
             />
-            {isDraftSaved && (
-              <DraftSavedToast
-                isVisible={isDraftSaved}
-                onHide={() => setIsDraftSaved(false)}
-              />
-            )}
           </div>
+          {isDraftSaved && (
+            <DraftSavedToast
+              isVisible={isDraftSaved}
+              onHide={() => setIsDraftSaved(false)}
+            />
+          )}
         </div>
       </div>
 
