@@ -16,24 +16,33 @@ interface MobileSideBarContentsProps {
   userData: { name: string; email: string };
   goalData: { title: string; id: number }[];
   toggleSideBar: () => void;
-  handleShowTodoModal: () => void;
+  onShowTodoModal: () => void;
+  onShowDeletePopup: (goalId: number) => void;
 }
 
 function MobileSideBarContents({
   userData,
   goalData,
   toggleSideBar,
-  handleShowTodoModal,
+  onShowTodoModal,
+  onShowDeletePopup,
 }: MobileSideBarContentsProps) {
   const [isEditing, setIsEditing] = useState(false);
   const [newGoal, setNewGoal] = useState('');
   const inputRef = useRef<HTMLInputElement>(null);
-  const navigate = useNavigate();
 
+  const navigate = useNavigate();
   useOutsideClick(inputRef, () => setIsEditing(false));
+  const { mutate: postMutate, isPending } = usePostGoal();
 
   const handleAddGoalBtn = () => {
     setTimeout(() => setIsEditing(true), 0);
+  };
+
+  const handleAddPostGoal = () => {
+    setIsEditing(false);
+    postMutate(newGoal);
+    setNewGoal('');
   };
 
   useEffect(() => {
@@ -41,8 +50,6 @@ function MobileSideBarContents({
       inputRef.current.focus();
     }
   }, [isEditing]);
-
-  const { mutate, isPending } = usePostGoal();
 
   return (
     <div className="flex-col">
@@ -96,7 +103,7 @@ function MobileSideBarContents({
             대시보드
           </div>
         </div>
-        <Button shape="solid" size="xs" onClick={handleShowTodoModal}>
+        <Button shape="solid" size="xs" onClick={onShowTodoModal}>
           <PlusIcon width={16} height={16} className="stroke-white" />
           <span className="ml-0.5 text-sm font-semibold">새 할 일</span>
         </Button>
@@ -124,24 +131,6 @@ function MobileSideBarContents({
         </Button>
       </div>
       <ul>
-        {goalData.map((item) => (
-          <div
-            onClick={() => {
-              navigate(`${routes.goalDetail}/${item.id}`);
-              toggleSideBar();
-            }}
-            key={item.id}
-          >
-            <li className="cursor-pointer p-2 text-sm font-medium text-slate-700">
-              • {item.title}
-            </li>
-          </div>
-        ))}
-        {isPending && (
-          <li className="p-2 text-sm font-medium text-slate-700">
-            • {newGoal}
-          </li>
-        )}
         {isEditing && (
           <li className="flex items-center p-2 text-sm font-medium text-slate-700">
             <span>•</span>
@@ -151,16 +140,50 @@ function MobileSideBarContents({
               placeholder="새 목표를 입력해주세요"
               value={newGoal}
               onChange={(e) => setNewGoal(e.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === 'Enter') {
-                  setIsEditing(false);
-                  mutate(newGoal);
-                  setNewGoal('');
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  handleAddPostGoal();
                 }
               }}
             />
+
+            <Button
+              shape="solid"
+              size="xs"
+              onClick={handleAddPostGoal}
+              additionalClass="w-6 h-6 ml-2"
+            >
+              <PlusIcon width={16} height={16} className="stroke-white" />
+            </Button>
           </li>
         )}
+        {isPending && (
+          <li className="p-2 text-sm font-medium text-slate-700">
+            • {newGoal}
+          </li>
+        )}
+        {goalData.map((item) => (
+          <div
+            onClick={() => {
+              navigate(`${routes.goalDetail}/${item.id}`);
+              toggleSideBar();
+            }}
+            key={item.id}
+          >
+            <li className="flex cursor-pointer flex-row justify-between p-2 text-sm font-medium text-slate-700">
+              <div>• {item.title}</div>
+              <PlusIcon
+                width={15}
+                height={15}
+                className="rotate-45 stroke-slate-400"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onShowDeletePopup(item.id);
+                }}
+              />
+            </li>
+          </div>
+        ))}
       </ul>
     </div>
   );

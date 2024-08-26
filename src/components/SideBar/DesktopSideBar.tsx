@@ -1,5 +1,7 @@
 import { FoldIcon, LogoIcon } from '@assets';
+import Popup from '@components/Popup';
 import TodoCreateModal from '@components/TodoModal/TodoCreateModal';
+import useDeleteGoal from '@hooks/api/goalsAPI/useDeleteGoal';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import DesktopSideBarContents from './DesktopSideBarContents';
@@ -26,7 +28,22 @@ function DesktopSideBar({
   goalData,
 }: SideBarProps) {
   const [showTodoModal, setShowTodoModal] = useState(false);
-  const handleShowTodoModal = () => setShowTodoModal(true);
+  const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
+  const [goalId, setGoalId] = useState<number>(0);
+  const { mutate: deleteGoalMutate } = useDeleteGoal();
+  const onShowTodoModal = () => setShowTodoModal(true);
+  const onShowDeletePopup = (id: number) => {
+    setIsDeletePopupVisible(true);
+    setGoalId(id);
+  };
+  const handleDelete = () => {
+    deleteGoalMutate(goalId, {
+      onSuccess: () => {
+        setIsDeletePopupVisible(false);
+        setGoalId(0);
+      },
+    });
+  };
   const navigate = useNavigate();
   return (
     <>
@@ -65,13 +82,21 @@ function DesktopSideBar({
             userData={userData}
             goalData={goalData}
             toggleSideBar={toggleSideBar}
-            handleShowTodoModal={handleShowTodoModal}
+            onShowTodoModal={onShowTodoModal}
+            onShowDeletePopup={onShowDeletePopup}
             width={width}
           />
         )}
       </div>
       {showTodoModal && (
         <TodoCreateModal onClose={() => setShowTodoModal(false)} />
+      )}
+      {isDeletePopupVisible && (
+        <Popup
+          message="정말 삭제하시겠어요?"
+          onCancel={() => setIsDeletePopupVisible(false)}
+          onConfirm={handleDelete}
+        />
       )}
     </>
   );
