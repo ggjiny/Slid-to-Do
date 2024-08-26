@@ -1,4 +1,4 @@
-import { Todo } from '@/types/interface';
+import { Goal, Todo } from '@/types/interface';
 import { PlusIcon } from '@assets';
 import TodoItem from '@components/TodoItem';
 import TodoCreateModal from '@components/TodoModal/TodoCreateModal';
@@ -22,6 +22,7 @@ type Page = {
 };
 interface TodoBoxProps {
   title: 'To do' | 'Done';
+  goal: Goal;
   placeholder: string;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   todos: any;
@@ -33,6 +34,7 @@ interface TodoBoxProps {
 
 function TodoBox({
   title,
+  goal,
   placeholder,
   todos,
   fetchNextPage,
@@ -66,7 +68,12 @@ function TodoBox({
 
   return (
     <>
-      {isModalOpen && <TodoCreateModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <TodoCreateModal
+          initialGoal={goal}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
       <div
         className={`min-h-[221px] rounded-xl desktop:min-w-0 desktop:flex-1 ${title === 'To do' ? 'bg-white' : 'bg-slate-200'} flex flex-col px-6 py-4`}
       >

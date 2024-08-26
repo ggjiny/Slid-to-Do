@@ -1,11 +1,14 @@
 import { Goal } from '@/types/interface';
-import { FlagIcon } from '@assets';
+import { FlagIcon, PlusIcon } from '@assets';
+import CreateGoalModal from '@components/CreateGoalModal';
 import LoadingAnimation from '@components/LoadingAnimation';
 import useGetGoals from '@hooks/api/goalsAPI/useGetGoals';
+import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
 import TodosByGoalBox from './TodosByGoalBox';
 
 function TodosByGoal() {
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const {
     data: goalsInfo,
     isLoading,
@@ -47,17 +50,32 @@ function TodosByGoal() {
   }
 
   return (
-    <div className="mt-4 w-full rounded-xl bg-white px-6 pb-6 pt-4 tablet:mt-6">
-      <div className="flex items-center">
-        <div className="mr-2 flex h-10 w-10 items-center justify-center rounded-[15px] bg-[#F97316]">
-          <FlagIcon fill="white" width={24} height={24} />
+    <>
+      {isModalOpen && <CreateGoalModal onClose={() => setIsModalOpen(false)} />}
+      <div className="mt-4 w-full rounded-xl bg-white px-6 pb-6 pt-4 tablet:mt-6">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center">
+            <div className="mr-2 flex h-10 w-10 items-center justify-center rounded-[15px] bg-[#F97316]">
+              <FlagIcon fill="white" width={24} height={24} />
+            </div>
+            <div className="text-lg font-semibold leading-7 text-slate-800">
+              목표별 할 일
+            </div>
+          </div>
+          <button
+            type="button"
+            className="flex items-center"
+            onClick={() => setIsModalOpen(true)}
+          >
+            <PlusIcon width={24} height={24} className="mr-1 stroke-blue-500" />
+            <span className="mr-1 text-lg font-semibold text-blue-500">
+              새 목표
+            </span>
+          </button>
         </div>
-        <div className="text-lg font-semibold leading-7 text-slate-800">
-          목표별 할 일
-        </div>
+        {content}
       </div>
-      {content}
-    </div>
+    </>
   );
 }
 

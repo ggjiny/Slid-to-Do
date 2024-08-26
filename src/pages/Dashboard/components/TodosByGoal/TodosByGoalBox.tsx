@@ -60,7 +60,12 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
 
   return (
     <>
-      {isModalOpen && <TodoCreateModal onClose={() => setIsModalOpen(false)} />}
+      {isModalOpen && (
+        <TodoCreateModal
+          initialGoal={{ id, title }}
+          onClose={() => setIsModalOpen(false)}
+        />
+      )}
       <div className="relative mt-4">
         <div
           className={`transition-height flex w-full flex-col overflow-y-auto rounded-[32px] bg-blue-50 p-6 duration-300 ease-in-out first:mt-0 ${(isDonesMoreThanFive || isTodosMoreThanFive) && 'pb-12'}`}
@@ -106,7 +111,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
             </div>
             <div className="text-xs font-semibold leading-4">{progress}%</div>
           </div>
-          <div className="mt-4 flex flex-col text-sm text-slate-800 tablet:flex-row tablet:gap-4 desktop:gap-6">
+          <div className="mt-4 flex flex-grow flex-col text-sm text-slate-800 tablet:flex-row tablet:gap-4 desktop:gap-6">
             <TodoSection
               title="To do"
               placeholder="아직 해야할 일이 없어요"
@@ -117,6 +122,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
               todos={todosInfo}
               totalCount={todosTotalCount}
             />
+            <div className="hidden h-4/5 w-[1px] self-center bg-blue-300 tablet:block" />
             <TodoSection
               title="Done"
               placeholder="아직 다 한 일이 없어요"

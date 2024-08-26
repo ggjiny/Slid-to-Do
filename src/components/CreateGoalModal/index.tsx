@@ -1,36 +1,24 @@
-import { Goal } from '@/types/interface';
 import { DeleteIcon } from '@assets';
 import Button from '@components/Button';
-import LinkModal from '@components/LinkModal';
 import Popup from '@components/Popup';
-import { showErrorToast } from '@components/Toast';
-import usePostFile from '@hooks/api/filesAPI/usePostFile';
-import usePostTodo from '@hooks/api/todosAPI/usePostTodo';
+import usePostGoal from '@hooks/api/goalsAPI/usePostGoal';
 import useOutsideClick from '@hooks/useOutsideClick';
 import useVisibility from '@hooks/useVisibility';
-import { AxiosResponse } from 'axios';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
-import FileLinkSection from '../FileLinkSection';
-import GoalSection from '../GoalSection';
-import TitleSection from '../TitleSection';
+import { ChangeEvent, KeyboardEvent, useEffect, useRef, useState } from 'react';
+import GoalTitleSection from './GoalTitleSection';
 
-interface TodoCreateModalProps {
+interface CreateGoalModalProps {
   onClose: () => void;
-  initialGoal?: Goal;
 }
 
-function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
+function CreateGoalModal({ onClose }: CreateGoalModalProps) {
   const { isVisible: isOpen, handleClose } = useVisibility(onClose);
   const [title, setTitle] = useState('');
-  const [goal, setGoal] = useState<Goal | null>(initialGoal || null);
-  const [fileUrl, setFileUrl] = useState<string | null>(null);
-  const [linkUrl, setLinkUrl] = useState<string | null>(null);
-  const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
+  const [isSaving, setIsSaving] = useState(false);
   const [isUnsavedChangesPopupVisible, setIsUnsavedChangesPopupVisible] =
     useState(false);
 
-  const { mutate: uploadFile } = usePostFile();
-  const { mutate: addTodo } = usePostTodo();
+  const { mutate: createGoal } = usePostGoal();
 
   const titleInputRef = useRef<HTMLInputElement>(null);
 
@@ -44,69 +32,27 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
     setTitle(e.target.value);
   };
 
-  const handleGoalChange = (selectedOption: Goal | null) => {
-    setGoal(selectedOption);
-  };
-
-  const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const uploadedFile = e.target.files?.[0];
-
-    if (uploadedFile) {
-      const fileType = uploadedFile.type;
-      const validFileTypes = [
-        'application/pdf',
-        'image/jpeg',
-        'image/jpg',
-        'image/png',
-        'image/gif',
-        'video/mp4',
-        'video/quicktime',
-      ];
-
-      if (!validFileTypes.includes(fileType)) {
-        showErrorToast('이미지, PDF, 영상만 업로드 가능합니다.');
-        return;
-      }
-
-      uploadFile(uploadedFile, {
-        onSuccess: (response: AxiosResponse) => {
-          const uploadedFileUrl = response.data.url;
-          setFileUrl(uploadedFileUrl);
-        },
-      });
-    }
-  };
-
-  const handleLinkChange = (newLink: string) => {
-    setLinkUrl(newLink);
-  };
-
-  const handleFileDelete = () => {
-    setFileUrl(null);
-    const fileInput = document.getElementById('fileInput') as HTMLInputElement;
-    if (fileInput) {
-      fileInput.value = '';
-    }
-  };
-
-  const handleLinkDelete = () => {
-    setLinkUrl(null);
-  };
-
   const handleSave = () => {
-    addTodo({
-      title,
-      goalId: goal?.id || undefined,
-      fileUrl: fileUrl || undefined,
-      linkUrl: linkUrl || undefined,
-    });
+    if (isSaving) return;
+
+    setIsSaving(true);
+    createGoal(title);
     handleClose();
+    setTimeout(() => {
+      setIsSaving(false);
+    }, 300);
+  };
+
+  const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter' && e.nativeEvent.isComposing === false) {
+      handleSave();
+    }
   };
 
   const handleConfirmClose = () => {
     if (!isOpen) return;
 
-    if (title || fileUrl || linkUrl) {
+    if (title) {
       setIsUnsavedChangesPopupVisible(true);
     } else {
       handleClose();
@@ -116,8 +62,7 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   useOutsideClick(modalRef, () => handleConfirmClose());
 
-  const isTitleValid = title.length <= 30;
-  const canSave = isTitleValid && title.length > 0;
+  const canSave = title.length > 0;
 
   return (
     <>
@@ -132,7 +77,7 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
         >
           <div className="fixed left-0 right-0 top-0 z-10 flex w-full items-center justify-between bg-white p-6 tablet:static tablet:p-0">
             <div className="text-lg font-bold leading-7 text-slate-800">
-              할 일 생성
+              새 목표 추가
             </div>
             <div className="flex items-center">
               <button
@@ -145,25 +90,14 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
               </button>
             </div>
           </div>
-
           <div className="mt-6 flex grow flex-col items-center justify-start gap-y-6 overflow-auto pb-20 pt-6 tablet:mt-0 tablet:justify-between tablet:overflow-visible tablet:py-0">
-            <TitleSection
+            <GoalTitleSection
               title={title}
               onTitleChange={handleTitleChange}
-              isTitleValid={isTitleValid}
               inputRef={titleInputRef}
-            />
-            <GoalSection goal={goal} onGoalChange={handleGoalChange} />
-            <FileLinkSection
-              fileUrl={fileUrl}
-              linkUrl={linkUrl}
-              onFileChange={handleFileChange}
-              onFileDelete={handleFileDelete}
-              onLinkDelete={handleLinkDelete}
-              setIsLinkModalVisible={setIsLinkModalVisible}
+              onKeyPress={handleKeyPress}
             />
           </div>
-
           <div className="fixed bottom-0 left-0 right-0 z-10 flex w-full justify-center gap-x-2 bg-white px-6 py-3 tablet:static tablet:mt-8 tablet:p-0">
             <Button
               shape="solid"
@@ -177,15 +111,6 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
           </div>
         </div>
       </div>
-      {isLinkModalVisible && (
-        <LinkModal
-          onCancel={() => setIsLinkModalVisible(false)}
-          onConfirm={(link: string) => {
-            handleLinkChange(link);
-            setIsLinkModalVisible(false);
-          }}
-        />
-      )}
       {isUnsavedChangesPopupVisible && (
         <Popup
           message={`정말 나가시겠어요?\n저장되지 않습니다.`}
@@ -198,4 +123,4 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
   );
 }
 
-export default TodoCreateModal;
+export default CreateGoalModal;

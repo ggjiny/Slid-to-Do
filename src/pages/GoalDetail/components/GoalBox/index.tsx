@@ -1,9 +1,9 @@
+import { Goal } from '@/types/interface';
 import { FlagIcon } from '@assets';
 import Kebab from '@components/Kebab';
 import Popup from '@components/Popup';
 import routes from '@constants/routes';
 import useDeleteGoal from '@hooks/api/goalsAPI/useDeleteGoal';
-import useGetGoal from '@hooks/api/goalsAPI/useGetGoal';
 import usePatchGoal from '@hooks/api/goalsAPI/usePatchGoal';
 import useGetProgress from '@hooks/api/todosAPI/useGetProgress';
 import ProgressBar from '@ramonak/react-progress-bar';
@@ -11,24 +11,24 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 interface GoalBoxProps {
-  goalId: number;
+  goal: Goal;
 }
 
-function GoalBox({ goalId }: GoalBoxProps) {
+function GoalBox({ goal }: GoalBoxProps) {
   const navigate = useNavigate();
-  const { data: progressData } = useGetProgress(goalId);
-  const { data: goalData } = useGetGoal(goalId);
+  const { data: progressData } = useGetProgress(goal.id);
   const { mutate: deleteGoalMutate } = useDeleteGoal();
   const { mutate: patchGoalMutate } = usePatchGoal();
   const progress = progressData?.data.progress || 0;
   const [title, setTitle] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
+
   useEffect(() => {
-    if (goalData?.data.title) {
-      setTitle(goalData.data.title);
+    if (goal.title) {
+      setTitle(goal.title);
     }
-  }, [goalData]);
+  }, [goal.title]);
 
   const handleEdit = () => {
     setIsEditing(true);
@@ -36,7 +36,7 @@ function GoalBox({ goalId }: GoalBoxProps) {
 
   const handleSave = () => {
     patchGoalMutate(
-      { goalId, title },
+      { goalId: goal.id, title },
       {
         onSuccess: () => {
           setIsEditing(false);
@@ -46,7 +46,7 @@ function GoalBox({ goalId }: GoalBoxProps) {
   };
 
   const handleDelete = () => {
-    deleteGoalMutate(goalId, {
+    deleteGoalMutate(goal.id, {
       onSuccess: () => {
         navigate(routes.dashboard);
       },
