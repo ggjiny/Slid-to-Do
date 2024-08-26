@@ -1,10 +1,10 @@
 import axiosInstance from './axiosInstance';
 
-const getGoals = async (cursor?: number, size = 20) => {
+const getGoals = async (cursor?: number, size = 20, sortOrder = 'oldest') => {
   const response = await axiosInstance({
     url: '/goals',
     method: 'get',
-    params: { cursor, size },
+    params: { cursor, size, sortOrder },
   });
   return response;
 };
