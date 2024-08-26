@@ -1,4 +1,5 @@
 import { ArrowRightIcon, NoteIcon } from '@assets';
+import useGetGoal from '@hooks/api/goalsAPI/useGetGoal';
 import useGetTodos from '@hooks/api/todosAPI/useGetTodos';
 import { Link, useParams } from 'react-router-dom';
 import GoalBox from './components/GoalBox';
@@ -7,7 +8,7 @@ import TodoBox from './components/TodoBox';
 function GoalDetailPage() {
   const params = useParams();
   const goalId = Number(params.id) || 0;
-
+  const { data: goalData } = useGetGoal(goalId);
   const {
     data: todosInfo,
     isFetching: todoIsFetching,
@@ -26,6 +27,7 @@ function GoalDetailPage() {
     goalId,
     done: true,
   });
+  const goal = { id: goalId, title: goalData?.data.title };
 
   const todosTotalCount: number = todosInfo?.pages[0]?.data.totalCount ?? 0;
   const donesTotalCount: number = donesInfo?.pages[0]?.data.totalCount ?? 0;
@@ -37,7 +39,7 @@ function GoalDetailPage() {
           목표
         </h1>
         <div className="mt-4 flex flex-col gap-4 tablet:gap-6">
-          <GoalBox goalId={goalId} />
+          <GoalBox goal={goal} />
           <Link
             to={`/notes/${goalId}`}
             className="flex items-center justify-between rounded-xl border-[1px] border-slate-100 bg-blue-100 px-6 py-4"
@@ -51,6 +53,7 @@ function GoalDetailPage() {
           <div className="flex flex-col gap-4 tablet:gap-6 desktop:flex-row">
             <TodoBox
               title="To do"
+              goal={goal}
               placeholder="아직 해야할 일이 없어요"
               fetchNextPage={fetchNextTodosPage}
               hasNextPage={hasTodosNextPage}
@@ -60,6 +63,7 @@ function GoalDetailPage() {
             />
             <TodoBox
               title="Done"
+              goal={goal}
               placeholder="아직 다 한 일이 없어요"
               fetchNextPage={fetchNextDonesPage}
               hasNextPage={hasDonesNextPage}
