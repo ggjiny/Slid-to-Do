@@ -3,14 +3,14 @@ import { ChangeEvent } from 'react';
 interface TitleInputProps {
   title: string | undefined;
   onChange: (e: ChangeEvent<HTMLInputElement>) => void;
-  titleCount: number;
+
   maxLength: number;
 }
 
 function TitleInput({
   title,
   onChange,
-  titleCount,
+
   maxLength,
 }: TitleInputProps) {
   return (
@@ -25,10 +25,10 @@ function TitleInput({
       <div className="text-xs font-medium text-slate-800">
         <span
           className={`${
-            titleCount === maxLength ? 'text-red-500' : 'text-blue-500'
+            title?.length === maxLength ? 'text-red-500' : 'text-blue-500'
           }`}
         >
-          {titleCount}
+          {title?.length}
         </span>
         /{maxLength}
       </div>

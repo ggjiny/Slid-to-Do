@@ -1,6 +1,7 @@
 /* eslint-disable react/no-danger */
 
-import { DeleteIcon, FlagIcon } from '@assets';
+import { DeleteIcon } from '@assets';
+import FlagBoxIcon from '@components/FlagBoxIcon';
 import Kebab from '@components/Kebab';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import useGetNote from '@hooks/api/notesAPI/useGetNote';
@@ -23,7 +24,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
 
   useEffect(() => {
     if (noteData) {
-      // 애니메이션 효과를 위해 일정 시간 후에 isOpen을 true로 변경 (안그러면 애니메이션이 제대로 적용이 안됨)
+      // 애니메이션 효과를 위해 일정 시간 후에 isOpen을 true로 변경
       setTimeout(() => setIsOpen(true), 10);
     }
   }, [noteData]);
@@ -63,7 +64,9 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
   };
 
   const handleDeleteNote = () => {
-    deleteNoteMutate(noteId);
+    deleteNoteMutate(noteId, {
+      onSuccess: () => handleClose(),
+    });
   };
 
   return (
@@ -82,9 +85,7 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
           <div className="flex flex-col gap-3 border-b-[1px] border-slate-200 pb-6">
             <div className="flex items-center justify-between">
               <div className="flex gap-[6px]">
-                <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800">
-                  <FlagIcon className="h-[14.4px] w-[14.4px] fill-white" />
-                </div>
+                <FlagBoxIcon isSmall />
                 <h3 className="font-medium leading-6 text-slate-800">
                   {noteData.data.goal?.title || '목표 없음'}
                 </h3>

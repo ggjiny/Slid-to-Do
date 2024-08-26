@@ -1,12 +1,14 @@
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { NoteDraft } from '@/types/interface';
+import { TAG_REGEX } from '@constants/regex';
 import useGetNote from '@hooks/api/notesAPI/useGetNote';
 import usePatchNote from '@hooks/api/notesAPI/usePatchNote';
 import usePostNote from '@hooks/api/notesAPI/usePostNote';
 
 import Popup from '@components/Popup';
+import useDraft from '@hooks/useDraft';
+import countHtmlCharacters from '@utils/countHtmlCharacters';
 import DraftNotification from './components/DraftNotification';
 import DraftSavedToast from './components/DraftSavedToast';
 import Header from './components/Header';
@@ -26,10 +28,13 @@ function NewNotePage() {
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
   const [linkUrl, setLinkUrl] = useState('');
-  const [titleCount, setTitleCount] = useState(0);
+
   const [contentWithSpaces, setContentWithSpaces] = useState(0);
   const [contentWithoutSpaces, setContentWithoutSpaces] = useState(0);
-  const [isSubmitEnabled, setIsSubmitEnabled] = useState(false);
+
+  const contentText = content.replace(TAG_REGEX, '');
+
+  const isSubmitEnabled = title.trim().length > 0 && contentText.length > 0;
 
   const { data: noteData } = useGetNote(todo.noteId, isEditing);
 
@@ -38,21 +43,28 @@ function NewNotePage() {
       const prevTitle = noteData?.data.title;
       const prevContent = noteData?.data.content;
       const prevLinkUrl = noteData?.data.linkUrl;
+      const { withSpaces, withoutSpaces } = countHtmlCharacters(prevContent);
 
       setTitle(prevTitle);
       setContent(prevContent);
       setLinkUrl(prevLinkUrl);
-      setTitleCount(prevTitle.length);
-      setContentWithSpaces(prevContent.length);
-      setContentWithoutSpaces(prevContent.replace(/\s/g, '').length);
+      setContentWithSpaces(withSpaces);
+      setContentWithoutSpaces(withoutSpaces);
     }
   }, [isEditing, noteData]);
 
-  const [isDraftExist, setIsDraftExist] = useState(false);
   const [isDraftModalOpen, setIsDraftModalOpen] = useState(false);
-  const [draftTitle, setDraftTitle] = useState('');
   const [isDraftSaved, setIsDraftSaved] = useState(false);
   const [isLinkEmbedOpen, setIsLinkEmbedOpen] = useState(false);
+
+  const {
+    draftTitle,
+    isDraftExist,
+    closeDraftNotification,
+    saveDraft,
+    getDraft,
+    deleteDraft,
+  } = useDraft(todo.id);
 
   const { mutate: createNoteMutate } = usePostNote();
   const { mutate: editNoteMutate } = usePatchNote();
@@ -74,7 +86,6 @@ function NewNotePage() {
       contentWithSpaces,
       contentWithoutSpaces,
     };
-    setIsSubmitEnabled(title.trim().length > 0 && content.trim().length > 0);
   }, [title, content, linkUrl]);
 
   const handleChangeLink = (newLink: string) => {
@@ -85,7 +96,6 @@ function NewNotePage() {
     const { value: newTitle } = e.target;
     if (newTitle.length <= TITLE_MAX_LENGTH) {
       setTitle(newTitle);
-      setTitleCount(newTitle.length);
     }
   };
 
@@ -98,43 +108,25 @@ function NewNotePage() {
   const handleSaveDraft = () => {
     const note = { todoId: todo.id, ...noteRef.current };
 
-    const prevDrafts = JSON.parse(localStorage.getItem('draft-notes') || '[]');
-
-    const newDrafts = [
-      note,
-      ...prevDrafts.filter((draft: NoteDraft) => draft.todoId !== todo.id),
-    ];
-    localStorage.setItem('draft-notes', JSON.stringify(newDrafts));
+    saveDraft(note);
 
     setIsDraftSaved(true);
   };
 
   const handleGetDraft = () => {
-    const drafts = JSON.parse(localStorage.getItem('draft-notes') || '[]');
-    const currentDraft = drafts.find(
-      (draft: NoteDraft) => draft.todoId === todo.id,
-    );
+    const currentDraft = getDraft();
 
     if (currentDraft) {
       setTitle(currentDraft.title);
       setContent(currentDraft.content);
       setLinkUrl(currentDraft.linkUrl);
-      setTitleCount(currentDraft.title.length);
       setContentWithSpaces(currentDraft.contentWithSpaces);
       setContentWithoutSpaces(currentDraft.contentWithoutSpaces);
     }
   };
 
-  const handleDeleteDraft = (deleteId: number) => {
-    const drafts = JSON.parse(localStorage.getItem('draft-notes') || '[]');
-    const newDrafts = drafts.filter(
-      (draft: NoteDraft) => draft.todoId !== deleteId,
-    );
-    localStorage.setItem('draft-notes', JSON.stringify(newDrafts));
-  };
-
-  const handleCloseDraftNotification = () => {
-    setIsDraftExist(false);
+  const handleDeleteDraft = () => {
+    deleteDraft();
   };
 
   const handleOpenDraftModal = (value: boolean) => {
@@ -153,7 +145,7 @@ function NewNotePage() {
       },
       {
         onSuccess: () => {
-          handleDeleteDraft(todo.id);
+          handleDeleteDraft();
           navigate(-1);
         },
       },
@@ -172,7 +164,7 @@ function NewNotePage() {
       },
       {
         onSuccess: () => {
-          handleDeleteDraft(todo.id);
+          handleDeleteDraft();
           navigate(-1);
         },
       },
@@ -180,19 +172,6 @@ function NewNotePage() {
   };
 
   useEffect(() => {
-    const drafts = localStorage.getItem('draft-notes');
-
-    // 임시 저장 불러올 때 제목을 보여주기 위함
-    if (drafts) {
-      const currentDraft = JSON.parse(drafts).find(
-        (draft: NoteDraft) => draft.todoId === todo.id,
-      );
-      if (currentDraft) {
-        setIsDraftExist(true);
-        setDraftTitle(currentDraft.title);
-      }
-    }
-
     // 5분마다 저장하기 위함
     const interval = setInterval(() => {
       handleSaveDraft();
@@ -224,7 +203,7 @@ function NewNotePage() {
           <div className="tablet:overflow-y-auto">
             {isDraftExist && (
               <DraftNotification
-                onCloseDraftNotification={handleCloseDraftNotification}
+                onCloseDraftNotification={closeDraftNotification}
                 onOpenDraftModal={handleOpenDraftModal}
               />
             )}
@@ -236,7 +215,6 @@ function NewNotePage() {
             <TitleInput
               title={title}
               onChange={handleChangeTitle}
-              titleCount={titleCount}
               maxLength={TITLE_MAX_LENGTH}
             />
             <div className="mb-2 mt-3 text-xs font-medium text-slate-800">
@@ -276,7 +254,7 @@ function NewNotePage() {
           onConfirm={() => {
             handleGetDraft();
             handleOpenDraftModal(false);
-            handleCloseDraftNotification();
+            closeDraftNotification();
           }}
         />
       )}
