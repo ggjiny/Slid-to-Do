@@ -28,6 +28,7 @@ function Popup({
       className={`fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 transition-opacity duration-300 ${
         isVisible ? 'opacity-100' : 'opacity-0'
       }`}
+      onClick={(e) => e.stopPropagation()}
     >
       <div
         className={`flex h-[203px] w-[300px] transform flex-col items-center justify-center gap-2.5 rounded-lg bg-white p-6 transition-transform duration-300 tablet:h-[216px] tablet:w-[450px] ${
