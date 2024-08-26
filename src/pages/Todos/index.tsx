@@ -4,6 +4,7 @@ import TodoCreateModal from '@components/TodoModal/TodoCreateModal';
 import useGetTodos from '@hooks/api/todosAPI/useGetTodos';
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
+import TagManager from 'react-gtm-module';
 import { useInView } from 'react-intersection-observer';
 import FilterButtons from './components/FilterButtons';
 import useLayoutStyles from './useLayoutStyles';
@@ -47,6 +48,16 @@ function TodosPage() {
 
   const todos = data?.pages.flatMap((page) => page.data.todos) || [];
 
+  const addTodoClicked = () => {
+    const addTodoClickedArgs = {
+      dataLayer: {
+        event: 'click_add_todo',
+      },
+    };
+
+    TagManager.dataLayer(addTodoClickedArgs);
+  };
+
   return (
     <div className={entireContainerClass} style={entireContainerStyle}>
       <div className="flex w-full items-center justify-between">
@@ -57,6 +68,7 @@ function TodosPage() {
           className="inline-flex cursor-pointer items-center justify-start gap-1 self-stretch"
           onClick={() => {
             setIsTodoCreateModalVisible(true);
+            addTodoClicked();
           }}
         >
           <PlusBlueIcon className="relative h-4 w-4" />

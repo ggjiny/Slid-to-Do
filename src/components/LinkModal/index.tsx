@@ -110,7 +110,7 @@ function LinkModal({
             />
             {!isValid && (
               <div className="mt-1.5 pl-2 text-sm font-normal leading-tight text-red-500">
-                잘못된 링크 주소입니다.
+                잘못된 링크 주소입니다. (예시: https://example.com)
               </div>
             )}
           </div>
