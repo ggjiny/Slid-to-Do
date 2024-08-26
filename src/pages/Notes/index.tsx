@@ -1,4 +1,4 @@
-import { FlagIcon } from '@assets';
+import FlagBoxIcon from '@components/FlagBoxIcon';
 import useGetGoal from '@hooks/api/goalsAPI/useGetGoal';
 import { useParams } from 'react-router-dom';
 import NoteList from './components/NoteList';
@@ -14,9 +14,7 @@ function NotesPage() {
           노트 모아보기
         </h1>
         <div className="mb-4 flex max-w-[792px] items-center gap-2 rounded-xl bg-white py-[14px] pl-6">
-          <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800">
-            <FlagIcon className="h-[14.4px] w-[14.4px] fill-white" />
-          </div>
+          <FlagBoxIcon isSmall />
           <h2 className="text-sm font-semibold leading-5 text-slate-800">
             {goalData?.data.title}
           </h2>

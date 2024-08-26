@@ -1,10 +1,13 @@
-import { Goal } from '@/types/interface';
-import { FlagIcon, PlusIcon } from '@assets';
-import CreateGoalModal from '@components/CreateGoalModal';
-import LoadingAnimation from '@components/LoadingAnimation';
 import useGetGoals from '@hooks/api/goalsAPI/useGetGoals';
 import { useState } from 'react';
 import InfiniteScroll from 'react-infinite-scroller';
+
+import { Goal } from '@/types/interface';
+import { PlusIcon } from '@assets';
+
+import CreateGoalModal from '@components/CreateGoalModal';
+import FlagBoxIcon from '@components/FlagBoxIcon';
+import LoadingAnimation from '@components/LoadingAnimation';
 import TodosByGoalBox from './TodosByGoalBox';
 
 function TodosByGoal() {
@@ -55,9 +58,7 @@ function TodosByGoal() {
       <div className="mt-4 w-full rounded-xl bg-white px-6 pb-6 pt-4 tablet:mt-6">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            <div className="mr-2 flex h-10 w-10 items-center justify-center rounded-[15px] bg-[#F97316]">
-              <FlagIcon fill="white" width={24} height={24} />
-            </div>
+            <FlagBoxIcon color="orange" additionalClass="mr-2" />
             <div className="text-lg font-semibold leading-7 text-slate-800">
               목표별 할 일
             </div>
@@ -68,7 +69,7 @@ function TodosByGoal() {
             onClick={() => setIsModalOpen(true)}
           >
             <PlusIcon width={24} height={24} className="mr-1 stroke-blue-500" />
-            <span className="mr-1 text-lg font-semibold text-blue-500">
+            <span className="mr-1 text-base font-semibold text-blue-500 desktop:text-lg">
               새 목표
             </span>
           </button>

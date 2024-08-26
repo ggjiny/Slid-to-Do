@@ -1,4 +1,4 @@
-import { FlagIcon } from '@assets';
+import FlagBoxIcon from '@components/FlagBoxIcon';
 
 interface InfoSectionProps {
   title: string;
@@ -10,9 +10,7 @@ function InfoSection({ title, goalTitle, done }: InfoSectionProps) {
   return (
     <>
       <div className="mb-3 flex gap-[6px]">
-        <div className="flex h-6 w-6 items-center justify-center rounded-lg bg-slate-800">
-          <FlagIcon className="h-[14.4px] w-[14.4px] fill-white" />
-        </div>
+        <FlagBoxIcon isSmall />
         <h3 className="font-medium leading-6 text-slate-800">
           {goalTitle || '목표 없음'}
         </h3>

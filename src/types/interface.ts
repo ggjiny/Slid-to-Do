@@ -49,6 +49,8 @@ export interface CreateNote {
 
 export interface NoteDraft extends CreateNote {
   todoId: number;
+  contentWithSpaces: number;
+  contentWithoutSpaces: number;
 }
 
 export type UpdateNote = Partial<CreateNote>;

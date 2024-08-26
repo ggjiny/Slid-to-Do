@@ -122,7 +122,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
               todos={todosInfo}
               totalCount={todosTotalCount}
             />
-            <div className="hidden h-4/5 w-[1px] self-center bg-blue-300 tablet:block" />
+            <div className="hidden h-4/5 w-[1px] self-center bg-blue-100 tablet:block" />
             <TodoSection
               title="Done"
               placeholder="아직 다 한 일이 없어요"

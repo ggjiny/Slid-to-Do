@@ -42,7 +42,7 @@ function Kebab({ onEdit, onDelete, isSmall = false }: KebabProps) {
         icon: 'w-6 h-6',
         circle: 'w-8 h-8',
         box: 'shadow-sm tablet:shadow-lg',
-        button: 'text-sm tablet:text-lg px-4 tablet:px-5',
+        button: 'text-sm desktop:text-lg px-4 tablet:px-5',
       };
 
   return (
