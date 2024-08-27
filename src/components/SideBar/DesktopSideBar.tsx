@@ -71,7 +71,7 @@ function DesktopSideBar({
           )}
           <button
             type="button"
-            aria-label="expend button"
+            aria-label="expand button"
             onClick={toggleSideBar}
           >
             <FoldIcon className={`${isOpen ? 'rotate-0' : 'rotate-180'}`} />

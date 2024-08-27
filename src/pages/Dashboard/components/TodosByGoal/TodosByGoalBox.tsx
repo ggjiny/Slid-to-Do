@@ -66,7 +66,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
           onClose={() => setIsModalOpen(false)}
         />
       )}
-      <div className="relative mt-4">
+      <div id="goal-box" className="relative mt-4">
         <div
           className={`transition-height flex w-full flex-col overflow-y-auto rounded-[32px] bg-blue-50 p-6 duration-300 ease-in-out first:mt-0 ${(isDonesMoreThanFive || isTodosMoreThanFive) && 'pb-12'}`}
           style={{

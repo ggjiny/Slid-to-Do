@@ -86,7 +86,7 @@ function SignInPage() {
                   message: '유효한 이메일 주소를 입력해주세요.',
                 },
               })}
-              id="id"
+              id="email"
               size="lg"
               isInvalid={!!errors.email}
               placeholder="이메일을 입력해주세요."

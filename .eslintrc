@@ -2,7 +2,8 @@
   "env": {
     "browser": true,
     "es6": true,
-    "node": true
+    "node": true,
+    "cypress/globals": true
   },
   "parserOptions": {
     "ecmaFeatures": {
@@ -14,9 +15,10 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "airbnb",
-    "prettier"
+    "prettier",
+    "plugin:cypress/recommended"
   ],
-  "plugins": ["prettier"],
+  "plugins": ["prettier", "cypress"],
   "rules": {
     // "max-len": ["warn", { "code": 80 }],
     "prettier/prettier": "error",
@@ -52,7 +54,13 @@
     // nesting: label이 form control을 직접 감싸는지, id: htmlFor/id로 연결돼있는지
     "jsx-a11y/label-has-associated-control": [ 2, {
       "some": [ "nesting", "id" ]
-    }]
+    }],
+    "cypress/no-assigning-return-values": "error",
+    "cypress/no-unnecessary-waiting": "error",
+    "cypress/assertion-before-screenshot": "warn",
+    "cypress/no-force": "warn",
+    "cypress/no-async-tests": "error",
+    "cypress/no-pause": "error"
   },
   "overrides": [
     {

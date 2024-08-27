@@ -74,6 +74,7 @@ function GoalBox({ goal }: GoalBoxProps) {
             <FlagBoxIcon />
             {isEditing ? (
               <input
+                placeholder="목표를 입력해주세요"
                 className="rounded-md border border-slate-300 px-2 py-1 font-semibold leading-6 tablet:text-lg tablet:leading-7"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}

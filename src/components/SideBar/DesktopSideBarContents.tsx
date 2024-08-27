@@ -66,10 +66,16 @@ function DesktopSideBarContents({
         <div className="mt-4 flex flex-row">
           <ProfileIcon width={64} height={64} />
           <div className="ml-3 flex flex-col items-start justify-between">
-            <div className="h-4 text-sm font-semibold leading-5 text-slate-800">
+            <div
+              id="name"
+              className="h-4 text-sm font-semibold leading-5 text-slate-800"
+            >
               {userData.name}
             </div>
-            <div className="h-4 text-sm font-medium leading-5 text-slate-600">
+            <div
+              id="email"
+              className="h-4 text-sm font-medium leading-5 text-slate-600"
+            >
               {userData.email}
             </div>
             <button
@@ -117,6 +123,7 @@ function DesktopSideBarContents({
             <div className="ml-2 text-lg font-medium text-slate-800">목표</div>
           </div>
           <Button
+            id="add-goal-button-sideBar"
             shape="outlined"
             size="xs"
             onClick={handleAddGoalBtn}
@@ -130,7 +137,7 @@ function DesktopSideBarContents({
             <span className="mr-2 text-sm font-semibold">새 목표</span>
           </Button>
         </div>
-        <ul>
+        <ul id="goal-list">
           {isEditing && (
             <li className="flex items-center p-2 text-sm font-medium text-slate-700">
               <span>•</span>
@@ -172,6 +179,7 @@ function DesktopSideBarContents({
               <li className="flex cursor-pointer flex-row items-center justify-between p-2 text-sm font-medium text-slate-700">
                 <div>• {item.title}</div>
                 <PlusIcon
+                  id="delete-goal-button"
                   width={15}
                   height={15}
                   className="rotate-45 stroke-slate-400"
