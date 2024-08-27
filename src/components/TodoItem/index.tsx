@@ -99,7 +99,6 @@ function TodoItem({
         onClick={() => setIsModalOpen(true)}
         role="button"
         tabIndex={0}
-        onKeyDown={() => setIsModalOpen(true)}
       >
         <div className="flex w-full items-start space-x-2 overflow-hidden">
           <button
