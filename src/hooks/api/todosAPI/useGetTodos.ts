@@ -10,7 +10,7 @@ const useGetTodos = ({ goalId, done, size }: useGetTodoProps) =>
   useInfiniteQuery({
     queryKey: ['todos', goalId, done, size],
     queryFn: ({ pageParam }) =>
-      todosAPI.getTodos(goalId, done, pageParam, size),
+      todosAPI.getTodos({ goalId, done, cursor: pageParam, size }),
     getNextPageParam: (lastPage) =>
       lastPage.data.nextCursor !== null ? lastPage.data.nextCursor : undefined,
     initialPageParam: undefined,

@@ -11,18 +11,18 @@ import TodoSection from './TodoSection';
 import ToggleButton from './ToggleButton';
 
 interface TodosByGoalProps {
-  id: number;
+  goalId: number;
   title: string;
 }
 
-function TodosByGoalBox({ id, title }: TodosByGoalProps) {
+function TodosByGoalBox({ goalId, title }: TodosByGoalProps) {
   const windowWidth = useWindowWidth();
   const [isTodosMoreThanFive, setIsTodosMoreThanFive] = useState(false);
   const [isDonesMoreThanFive, setIsDonesMoreThanFive] = useState(false);
   const [isToggleOpen, setIsToggleOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: progressData } = useGetProgress(id);
+  const { data: progressData } = useGetProgress(goalId);
   const progress = progressData?.data.progress || 0;
 
   const {
@@ -31,7 +31,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
     fetchNextPage: fetchNextTodosPage,
     hasNextPage: hasTodosNextPage,
   } = useGetTodos({
-    goalId: id,
+    goalId,
     done: false,
   });
   const {
@@ -40,7 +40,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
     fetchNextPage: fetchNextDonesPage,
     hasNextPage: hasDonesNextPage,
   } = useGetTodos({
-    goalId: id,
+    goalId,
     done: true,
   });
 
@@ -62,7 +62,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
     <>
       {isModalOpen && (
         <TodoCreateModal
-          initialGoal={{ id, title }}
+          initialGoal={{ id: goalId, title }}
           onClose={() => setIsModalOpen(false)}
         />
       )}
@@ -75,7 +75,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
         >
           <div className="flex items-center justify-between">
             <Link
-              to={`${routes.goalDetail}/${id}`}
+              to={`${routes.goalDetail}/${goalId}`}
               className="flex items-center gap-[2px]"
             >
               <div className="text-lg font-bold leading-7 text-slate-800">
@@ -114,6 +114,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
           <div className="mt-4 flex flex-grow flex-col text-sm text-slate-800 tablet:flex-row tablet:gap-4 desktop:gap-6">
             <TodoSection
               title="To do"
+              goalId={goalId}
               placeholder="아직 해야할 일이 없어요"
               fetchNextPage={fetchNextTodosPage}
               hasNextPage={hasTodosNextPage}
@@ -125,6 +126,7 @@ function TodosByGoalBox({ id, title }: TodosByGoalProps) {
             <div className="hidden h-4/5 w-[1px] self-center bg-blue-100 tablet:block" />
             <TodoSection
               title="Done"
+              goalId={goalId}
               placeholder="아직 다 한 일이 없어요"
               fetchNextPage={fetchNextDonesPage}
               hasNextPage={hasDonesNextPage}

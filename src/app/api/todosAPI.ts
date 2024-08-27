@@ -32,12 +32,19 @@ export interface UpdateTodo {
   done?: boolean;
 }
 
-const getTodos = async (
-  goalId?: number,
-  done?: boolean,
-  cursor?: number,
+interface GetTodosParams {
+  goalId?: number;
+  done?: boolean;
+  cursor?: number;
+  size?: number;
+}
+
+const getTodos = async ({
+  goalId,
+  done,
+  cursor,
   size = 20,
-) => {
+}: GetTodosParams) => {
   const response = await axiosInstance({
     url: '/todos',
     method: 'get',

@@ -38,7 +38,11 @@ function TodosByGoal() {
         <div className="mt-4">
           {goalsData.map((page) =>
             page.data.goals.map((goal: Goal) => (
-              <TodosByGoalBox key={goal.id} id={goal.id} title={goal.title} />
+              <TodosByGoalBox
+                key={goal.id}
+                goalId={goal.id}
+                title={goal.title}
+              />
             )),
           )}
         </div>

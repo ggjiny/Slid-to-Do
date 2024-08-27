@@ -58,7 +58,12 @@ function TodoBox({
         <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
           {todos.pages.map((pageData: Page) =>
             pageData.data.todos.map((todo: Todo) => (
-              <TodoItem key={todo.id} todo={todo} showIcons />
+              <TodoItem
+                key={todo.id}
+                todo={todo}
+                goalId={todo.goal?.id}
+                showIcons
+              />
             )),
           )}
         </InfiniteScroll>

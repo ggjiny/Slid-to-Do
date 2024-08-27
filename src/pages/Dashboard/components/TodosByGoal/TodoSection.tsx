@@ -20,6 +20,7 @@ type Page = {
 };
 interface TodoSectionProps {
   title: string;
+  goalId: number;
   placeholder: string;
   todos: any;
   fetchNextPage: () => void;
@@ -31,6 +32,7 @@ interface TodoSectionProps {
 
 function TodoSection({
   title,
+  goalId,
   placeholder,
   todos,
   fetchNextPage,
@@ -53,7 +55,7 @@ function TodoSection({
       content = (
         <div>
           {todosData[0].data.todos.slice(0, 4).map((todo: Todo) => (
-            <TodoItem key={todo.id} todo={todo} showIcons />
+            <TodoItem key={todo.id} todo={todo} goalId={goalId} showIcons />
           ))}
         </div>
       );
@@ -62,7 +64,7 @@ function TodoSection({
         <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
           {todosData.map((pageData: Page) =>
             pageData.data.todos.map((todo: Todo) => (
-              <TodoItem key={todo.id} todo={todo} showIcons />
+              <TodoItem key={todo.id} todo={todo} goalId={goalId} showIcons />
             )),
           )}
         </InfiniteScroll>

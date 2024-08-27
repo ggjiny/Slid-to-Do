@@ -2,12 +2,12 @@ import { Todo } from '@/types/interface';
 import { ArrowRightIcon, TodoRecentlyIcon } from '@assets';
 import LoadingAnimation from '@components/LoadingAnimation';
 import TodoItem from '@components/TodoItem';
-import useGetTodos from '@hooks/api/todosAPI/useGetTodos';
+import useGetRecentTodos from '@hooks/api/todosAPI/useGetRecentTodos';
 import { Link } from 'react-router-dom';
 
 function RecentTodos() {
-  const { data, isLoading } = useGetTodos({ size: 4 });
-  const todosData = data?.pages[0].data;
+  const { data, isLoading } = useGetRecentTodos();
+  const todosData = data?.data;
 
   let content;
   if (isLoading) {
@@ -18,7 +18,7 @@ function RecentTodos() {
     );
   } else if (todosData && todosData.totalCount > 0) {
     content = todosData.todos.map((todo: Todo) => (
-      <TodoItem key={todo.id} todo={todo} showGoals />
+      <TodoItem key={todo.id} todo={todo} goalId={todo.goal?.id} showGoals />
     ));
   } else {
     content = (
