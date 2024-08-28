@@ -30,7 +30,7 @@ function TodoCreateModal({ onClose, initialGoal }: TodoCreateModalProps) {
     useState(false);
 
   const { mutate: uploadFile } = usePostFile();
-  const { mutate: addTodo } = usePostTodo();
+  const { mutate: addTodo } = usePostTodo(goal?.id);
 
   const titleInputRef = useRef<HTMLInputElement>(null);
 

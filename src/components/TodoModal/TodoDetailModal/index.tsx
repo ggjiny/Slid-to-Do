@@ -44,8 +44,8 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
     useState(false);
 
   const { mutate: uploadFile } = usePostFile();
-  const { mutate: editTodo } = usePatchTodo();
-  const { mutate: removeTodo } = useDeleteTodo();
+  const { mutate: editTodo } = usePatchTodo(todo.goal?.id, goal?.id);
+  const { mutate: removeTodo } = useDeleteTodo(todo.goal?.id);
 
   const handleTitleChange = (e: ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
