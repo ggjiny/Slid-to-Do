@@ -3,6 +3,7 @@
 import { DeleteIcon } from '@assets';
 import FlagBoxIcon from '@components/FlagBoxIcon';
 import Kebab from '@components/Kebab';
+import routes from '@constants/routes';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import useGetNote from '@hooks/api/notesAPI/useGetNote';
 import formatDate from '@utils/formatDate';
@@ -60,7 +61,9 @@ function NoteDetail({ onClose, noteId }: NoteDetailProps) {
       id: noteData?.data.todo.id,
     };
 
-    navigate('/notes/new', { state: { todo, isEditing: true } });
+    navigate(`${routes.newNote}/${todo.goal.id}`, {
+      state: { todo, isEditing: true },
+    });
   };
 
   const handleDeleteNote = () => {

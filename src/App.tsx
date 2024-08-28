@@ -1,4 +1,5 @@
 import SideBar from '@components/SideBar';
+import routes from '@constants/routes';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import AppErrorBoundary from '@utils/AppErrorBoundary';
@@ -19,9 +20,9 @@ function App() {
   const { pathname } = useLocation();
 
   const bgColor =
-    pathname === '/sign-in' ||
-    pathname === '/sign-up' ||
-    pathname === '/notes/new'
+    pathname === `${routes.signIn}` ||
+    pathname === `${routes.signUp}` ||
+    pathname.includes(`${routes.newNote}`)
       ? '#fff'
       : '#E2E8F0';
 

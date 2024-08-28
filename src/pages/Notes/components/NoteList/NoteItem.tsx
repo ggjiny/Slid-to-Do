@@ -2,6 +2,7 @@ import { Note } from '@/types/interface';
 import { NoteListIcon } from '@assets';
 import Kebab from '@components/Kebab';
 import NoteDetail from '@components/NoteDetail';
+import routes from '@constants/routes';
 import useDeleteNote from '@hooks/api/notesAPI/useDeleteNote';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -35,7 +36,9 @@ function NoteItem({ noteData }: NoteItemProps) {
       id: noteData.todo.id,
     };
 
-    navigate('/notes/new', { state: { todo, isEditing: true } });
+    navigate(`${routes.newNote}/${todo.goal.id}`, {
+      state: { todo, isEditing: true },
+    });
   };
 
   const handleDeleteNote = () => {

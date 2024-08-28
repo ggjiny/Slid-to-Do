@@ -19,6 +19,8 @@ jobs:
       # 특정 node.js 버전에 의존하지 않을 때 사용
       - name: Use Node.js
         uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
 
       # node_modules가 변했을때만 npm install 하기 위한 캐시
       - name: Cache node modules

@@ -12,6 +12,7 @@ const useVisibility = (
   }, []);
 
   const handleClose = () => {
+    if (!isVisible) return;
     setIsVisible(false);
     setTimeout(onClose, 300);
   };

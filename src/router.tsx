@@ -35,7 +35,7 @@ const router = createBrowserRouter([
         element: <NotesPage />,
       },
       {
-        path: routes.newNote,
+        path: `${routes.newNote}/:goalId?`,
         element: <NewNotePage />,
       },
       {

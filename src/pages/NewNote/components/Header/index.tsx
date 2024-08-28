@@ -27,6 +27,7 @@ function Header({
           size="xs"
           additionalClass="border-none tablet:w-[96px] tablet:h-[44px]"
           onClick={onClickDraftButton}
+          title="5분마다 자동으로 저장 됩니다"
         >
           임시 저장
         </Button>
