@@ -11,7 +11,7 @@ interface FileLinkSectionProps {
   onFileChange: (e: ChangeEvent<HTMLInputElement>) => void;
   onFileDelete: () => void;
   onLinkDelete: () => void;
-  setIsLinkModalVisible: (visible: boolean) => void;
+  onLinkModalOpen: () => void;
 }
 
 function FileLinkSection({
@@ -20,7 +20,7 @@ function FileLinkSection({
   onFileChange,
   onFileDelete,
   onLinkDelete,
-  setIsLinkModalVisible,
+  onLinkModalOpen,
 }: FileLinkSectionProps) {
   return (
     <div
@@ -32,10 +32,7 @@ function FileLinkSection({
       </div>
       <div className="flex items-start justify-start gap-3">
         <FileUploadButton fileUrl={fileUrl} onFileChange={onFileChange} />
-        <LinkUploadButton
-          linkUrl={linkUrl}
-          setIsLinkModalVisible={setIsLinkModalVisible}
-        />
+        <LinkUploadButton linkUrl={linkUrl} onLinkModalOpen={onLinkModalOpen} />
       </div>
       {fileUrl && (
         <div className="relative mx-auto mt-2 flex h-[184px] w-full items-center justify-center rounded-[20px] bg-slate-200 p-6">

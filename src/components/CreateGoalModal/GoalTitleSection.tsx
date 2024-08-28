@@ -16,21 +16,17 @@ function GoalTitleSection({
 }: GoalTitleSectionProps) {
   return (
     <div className="flex flex-col items-start justify-start self-stretch">
-      <div className="flex items-center justify-between">
-        <div className="text-base font-semibold leading-normal text-slate-800">
-          목표
-        </div>
+      <div className="mb-3 text-base font-semibold leading-normal text-slate-800">
+        목표
       </div>
-      <div className="mt-3 flex flex-col items-start justify-start self-stretch rounded-xl">
-        <BaseInput
-          size="lg"
-          value={title}
-          onChange={onTitleChange}
-          placeholder="목표를 입력해주세요."
-          onKeyDown={onKeyPress}
-          ref={inputRef}
-        />
-      </div>
+      <BaseInput
+        size="lg"
+        value={title}
+        onChange={onTitleChange}
+        placeholder="목표를 입력해주세요."
+        onKeyDown={onKeyPress}
+        ref={inputRef}
+      />
     </div>
   );
 }

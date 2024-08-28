@@ -12,10 +12,7 @@ function FilePreview({ fileUrl }: FilePreviewProps) {
 
   if (fileType === 'pdf') {
     return (
-      <Document
-        file={`https://corsproxy.io/?${fileUrl}`} // 나중에 도메인 연결하면 CORS 수정 요청 드릴 생각입니다
-        loading="PDF 미리보기 로딩 중..."
-      >
+      <Document file={fileUrl} loading="PDF 미리보기 로딩 중...">
         <Page
           pageNumber={1}
           height={160}

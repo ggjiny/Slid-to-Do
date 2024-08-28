@@ -1,6 +1,7 @@
 import { Goal, Todo } from '@/types/interface';
 import { DeleteIcon } from '@assets';
 import Button from '@components/Button';
+import CreateGoalModal from '@components/CreateGoalModal';
 import LinkModal from '@components/LinkModal';
 import Popup from '@components/Popup';
 import { showErrorToast } from '@components/Toast';
@@ -13,8 +14,8 @@ import { AxiosResponse } from 'axios';
 import { ChangeEvent, useRef, useState } from 'react';
 import FileLinkSection from '../FileLinkSection';
 import GoalSection from '../GoalSection';
-import StatusSection from '../StatusSection';
 import TitleSection from '../TitleSection';
+import StatusSection from './StatusSection';
 import useTodoDetail from './useTodoDetail';
 
 export interface TodoDetailModalProps {
@@ -38,6 +39,7 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
     setLinkUrl,
   } = useTodoDetail(todo);
 
+  const [isGoalModalVisible, setIsGoalModalVisible] = useState(false);
   const [isLinkModalVisible, setIsLinkModalVisible] = useState(false);
   const [isDeletePopupVisible, setIsDeletePopupVisible] = useState(false);
   const [isUnsavedChangesPopupVisible, setIsUnsavedChangesPopupVisible] =
@@ -57,6 +59,15 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
     } else {
       setGoal(null);
     }
+  };
+
+  const handleGoalModalOpen = () => {
+    setIsGoalModalVisible(true);
+  };
+
+  const handleGoalCreate = (newGoal: Goal) => {
+    setGoal(newGoal);
+    setIsGoalModalVisible(false);
   };
 
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -86,6 +97,10 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
         },
       });
     }
+  };
+
+  const handleLinkModalOpen = () => {
+    setIsLinkModalVisible(true);
   };
 
   const handleLinkChange = (newLink: string) => {
@@ -181,14 +196,18 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
               onTitleChange={handleTitleChange}
               isTitleValid={isTitleValid}
             />
-            <GoalSection goal={goal} onGoalChange={handleGoalChange} />
+            <GoalSection
+              goal={goal}
+              onGoalChange={handleGoalChange}
+              onGoalModalOpen={handleGoalModalOpen}
+            />
             <FileLinkSection
               fileUrl={fileUrl}
               linkUrl={linkUrl}
               onFileChange={handleFileChange}
               onFileDelete={handleFileDelete}
               onLinkDelete={handleLinkDelete}
-              setIsLinkModalVisible={setIsLinkModalVisible}
+              onLinkModalOpen={handleLinkModalOpen}
             />
           </div>
           <div className="fixed bottom-0 left-0 right-0 z-10 flex w-full justify-center gap-x-2 bg-white px-6 py-3 tablet:static tablet:mt-8 tablet:p-0">
@@ -212,6 +231,16 @@ function TodoDetailModal({ todo, onClose }: TodoDetailModalProps) {
           </div>
         </div>
       </div>
+      {isGoalModalVisible && (
+        <CreateGoalModal
+          onClose={() => setIsGoalModalVisible(false)}
+          onSave={(newGoal: Goal) => {
+            handleGoalCreate(newGoal);
+            setIsGoalModalVisible(false);
+          }}
+          fullscreen={false}
+        />
+      )}
       {isLinkModalVisible && (
         <LinkModal
           onCancel={() => setIsLinkModalVisible(false)}
