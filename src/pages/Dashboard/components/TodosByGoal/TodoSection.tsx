@@ -25,7 +25,6 @@ interface TodoSectionProps {
   todos: any;
   fetchNextPage: () => void;
   hasNextPage: boolean;
-  isFetching: boolean;
   isToggleOpen: boolean;
   totalCount: number;
 }
@@ -37,39 +36,36 @@ function TodoSection({
   todos,
   fetchNextPage,
   hasNextPage,
-  isFetching,
   isToggleOpen,
   totalCount,
 }: TodoSectionProps) {
   const todosData = todos?.pages || [];
   let content;
 
-  if (!isFetching) {
-    if (totalCount === 0) {
-      content = (
-        <div className="flex h-[120px] items-center justify-center">
-          <p className="text-sm font-normal text-slate-500">{placeholder}</p>
-        </div>
-      );
-    } else if (!isToggleOpen) {
-      content = (
-        <div>
-          {todosData[0].data.todos.slice(0, 4).map((todo: Todo) => (
+  if (totalCount === 0) {
+    content = (
+      <div className="flex h-[120px] items-center justify-center">
+        <p className="text-sm font-normal text-slate-500">{placeholder}</p>
+      </div>
+    );
+  } else if (!isToggleOpen) {
+    content = (
+      <div>
+        {todosData[0].data.todos.slice(0, 4).map((todo: Todo) => (
+          <TodoItem key={todo.id} todo={todo} goalId={goalId} showIcons />
+        ))}
+      </div>
+    );
+  } else {
+    content = (
+      <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
+        {todosData.map((pageData: Page) =>
+          pageData.data.todos.map((todo: Todo) => (
             <TodoItem key={todo.id} todo={todo} goalId={goalId} showIcons />
-          ))}
-        </div>
-      );
-    } else {
-      content = (
-        <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
-          {todosData.map((pageData: Page) =>
-            pageData.data.todos.map((todo: Todo) => (
-              <TodoItem key={todo.id} todo={todo} goalId={goalId} showIcons />
-            )),
-          )}
-        </InfiniteScroll>
-      );
-    }
+          )),
+        )}
+      </InfiniteScroll>
+    );
   }
 
   return (

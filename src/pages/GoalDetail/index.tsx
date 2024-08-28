@@ -11,7 +11,6 @@ function GoalDetailPage() {
   const { data: goalData } = useGetGoal(goalId);
   const {
     data: todosInfo,
-    isFetching: todoIsFetching,
     fetchNextPage: fetchNextTodosPage,
     hasNextPage: hasTodosNextPage,
   } = useGetTodos({
@@ -20,7 +19,6 @@ function GoalDetailPage() {
   });
   const {
     data: donesInfo,
-    isFetching: doneIsFetching,
     fetchNextPage: fetchNextDonesPage,
     hasNextPage: hasDonesNextPage,
   } = useGetTodos({
@@ -57,7 +55,6 @@ function GoalDetailPage() {
               placeholder="아직 해야할 일이 없어요"
               fetchNextPage={fetchNextTodosPage}
               hasNextPage={hasTodosNextPage}
-              isFetching={todoIsFetching}
               todos={todosInfo}
               totalCount={todosTotalCount}
             />
@@ -67,7 +64,6 @@ function GoalDetailPage() {
               placeholder="아직 다 한 일이 없어요"
               fetchNextPage={fetchNextDonesPage}
               hasNextPage={hasDonesNextPage}
-              isFetching={doneIsFetching}
               todos={donesInfo}
               totalCount={donesTotalCount}
             />

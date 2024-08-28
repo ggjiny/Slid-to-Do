@@ -28,7 +28,6 @@ interface TodoBoxProps {
   todos: any;
   fetchNextPage: () => void;
   hasNextPage: boolean;
-  isFetching: boolean;
   totalCount: number;
 }
 
@@ -39,36 +38,33 @@ function TodoBox({
   todos,
   fetchNextPage,
   hasNextPage,
-  isFetching,
   totalCount,
 }: TodoBoxProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   let content;
 
-  if (!isFetching) {
-    if (totalCount === 0) {
-      content = (
-        <div className="flex flex-grow items-center justify-center">
-          <p className="text-sm font-normal text-slate-500">{placeholder}</p>
-        </div>
-      );
-    } else {
-      content = (
-        <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
-          {todos.pages.map((pageData: Page) =>
-            pageData.data.todos.map((todo: Todo) => (
-              <TodoItem
-                key={todo.id}
-                todo={todo}
-                goalId={todo.goal?.id}
-                showIcons
-              />
-            )),
-          )}
-        </InfiniteScroll>
-      );
-    }
+  if (totalCount === 0) {
+    content = (
+      <div className="flex flex-grow items-center justify-center">
+        <p className="text-sm font-normal text-slate-500">{placeholder}</p>
+      </div>
+    );
+  } else {
+    content = (
+      <InfiniteScroll loadMore={fetchNextPage} hasMore={hasNextPage}>
+        {todos.pages.map((pageData: Page) =>
+          pageData.data.todos.map((todo: Todo) => (
+            <TodoItem
+              key={todo.id}
+              todo={todo}
+              goalId={todo.goal?.id}
+              showIcons
+            />
+          )),
+        )}
+      </InfiniteScroll>
+    );
   }
 
   return (

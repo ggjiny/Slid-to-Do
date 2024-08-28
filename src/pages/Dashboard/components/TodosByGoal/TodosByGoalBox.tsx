@@ -27,7 +27,6 @@ function TodosByGoalBox({ goalId, title }: TodosByGoalProps) {
 
   const {
     data: todosInfo,
-    isFetching: todoIsFetching,
     fetchNextPage: fetchNextTodosPage,
     hasNextPage: hasTodosNextPage,
   } = useGetTodos({
@@ -36,7 +35,6 @@ function TodosByGoalBox({ goalId, title }: TodosByGoalProps) {
   });
   const {
     data: donesInfo,
-    isFetching: doneIsFetching,
     fetchNextPage: fetchNextDonesPage,
     hasNextPage: hasDonesNextPage,
   } = useGetTodos({
@@ -118,7 +116,6 @@ function TodosByGoalBox({ goalId, title }: TodosByGoalProps) {
               placeholder="아직 해야할 일이 없어요"
               fetchNextPage={fetchNextTodosPage}
               hasNextPage={hasTodosNextPage}
-              isFetching={todoIsFetching}
               isToggleOpen={isToggleOpen}
               todos={todosInfo}
               totalCount={todosTotalCount}
@@ -130,7 +127,6 @@ function TodosByGoalBox({ goalId, title }: TodosByGoalProps) {
               placeholder="아직 다 한 일이 없어요"
               fetchNextPage={fetchNextDonesPage}
               hasNextPage={hasDonesNextPage}
-              isFetching={doneIsFetching}
               isToggleOpen={isToggleOpen}
               todos={donesInfo}
               totalCount={donesTotalCount}
