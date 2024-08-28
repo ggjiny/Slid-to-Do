@@ -19,7 +19,7 @@ function SideBar() {
   }, [width]);
 
   const { data: userData } = useGetUser();
-  const { data: goalData } = useGetGoals(20, 'newest');
+  const { data: goalData } = useGetGoals(20);
 
   useEffect(() => {
     if (isOpen && width < 1920) {
