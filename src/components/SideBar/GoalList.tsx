@@ -33,11 +33,11 @@ function GoalList({
   return (
     <ul id="goal-list">
       {isEditing && (
-        <li className="flex items-center p-2 text-sm font-medium text-slate-700">
+        <li className="flex w-full items-center p-2 text-sm font-medium text-slate-700">
           <span>•</span>
           <input
             ref={inputRef}
-            className="ml-1 h-6 w-max flex-grow rounded-md border border-gray-300 p-2 text-sm"
+            className="ml-1 h-6 w-full flex-grow rounded-md border border-gray-300 p-2 text-sm"
             placeholder="새 목표를 입력해주세요"
             value={newGoal}
             onChange={(e) => onGoalState(e.target.value)}
