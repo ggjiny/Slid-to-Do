@@ -8,3 +8,5 @@
 - React, Typescript, Tanstack query, Tailwind, Storybook, Framer-motion
 
 ![image](https://github.com/user-attachments/assets/aaf02c1b-2f4e-4a1f-aebf-0331f6c02612)
+
+![image](https://github.com/user-attachments/assets/727d6567-5692-4829-a91b-911619515f41)
